@@ -27,6 +27,8 @@ class Config:
 
     # Mac M1
     # batch_size 为 1 的时候gpu比cpu更慢了
+    # FGSM:gpu比cpu慢
+    # IFGSM:gpu比cpu慢
     # device = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
 
     # 命令行参数选择
@@ -50,7 +52,8 @@ class Config:
     batch_size = 1
     shuffle = True
 
-    # 扰动参数
+    # FGSM中代表扰动参数
+    # IFGSM中代表迭代轮数
     epsilons = [0, .05, .1, .15, .2, .25, .3]
 
     # 记录不同扰动下的准确度
@@ -63,9 +66,9 @@ class Config:
 
     # IFGSM所需的参数
     # 迭代步长
-    alpha = 1/255
+    alpha = 1/50
     # 迭代次数
-    iters = 10
+    # iters = 10
 
     # 显示参数
     def display(self):
@@ -85,7 +88,6 @@ class Config:
         if self.attack == 'IFGSM':
             print('------------IFGSM Attack------------')
             print(f'alpha: {self.alpha}')
-            print(f'iters: {self.iters}')
 
 
 if __name__ == '__main__':

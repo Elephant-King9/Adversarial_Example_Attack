@@ -22,16 +22,7 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
         if init_pred.item() != label.item():
             continue
 
-        # 计算梯度，反向传播
-        loss = torch.nn.functional.nll_loss(output, label)
-        model.zero_grad()
-        loss.backward()
-
-        # 收集图片梯度
-        data_grad = img.grad.data
-        # 恢复图片到原始尺度
-        data_denorm = denorm(img, config.device)
-        perturbed_data = attacker.attack(data_denorm, eps, data_grad, config)
+        perturbed_data = attacker.attack(img, eps, label)
 
         """
         重新进行归一化处理
@@ -48,7 +39,6 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
         """
         perturbed_data_normalized = transforms.Normalize((0.1307,), (0.3081,))(perturbed_data)
         output = model(perturbed_data_normalized)
-
         final_pred = output.argmax(dim=1, keepdim=True)
         if final_pred.item() == label.item():
             accuracy += 1
