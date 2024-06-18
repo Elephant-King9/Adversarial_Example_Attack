@@ -1,6 +1,7 @@
 # 主函数
 from torch.utils.data import DataLoader
 
+from attack_flow import attack_flow
 from attacks.attack_zoo import get_attack
 from datasets.dataset_zoo import get_dataset
 from models.model_zoo import get_model
@@ -26,7 +27,7 @@ def main(config):
     i = 0
     for eps in config.epsilons:
         # 测试不同的扰动对于准确性的判断
-        acc, ex = attacker.test(eps)
+        acc, ex = attack_flow(eps, attacker, model, val_dataLoader, config)
         # 将此扰动的准确度记录
         config.accuracies.append(acc)
         # 二维数组，行代表不同的epsilon，列代表当前epsilon生成的对抗样本

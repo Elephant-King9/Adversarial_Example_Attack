@@ -3,7 +3,7 @@ import os
 from loguru import logger
 
 # log文件夹路径
-log_dir = "../logs"
+log_dir = "./logs"
 # log文件路径
 log_file = "log"
 

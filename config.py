@@ -60,6 +60,13 @@ class Config:
 
     # plt生成图像保存的文件夹路径
     plt_path = 'results/plt_pics'
+
+    # IFGSM所需的参数
+    # 迭代步长
+    alpha = 1/255
+    # 迭代次数
+    iters = 10
+
     # 显示参数
     def display(self):
         print('------------Train Device------------')
@@ -75,6 +82,10 @@ class Config:
         print('------------DataLoader------------')
         print(f'batch_size: {self.batch_size}')
         print(f'shuffle: {self.shuffle}')
+        if self.attack == 'IFGSM':
+            print('------------IFGSM Attack------------')
+            print(f'alpha: {self.alpha}')
+            print(f'iters: {self.iters}')
 
 
 if __name__ == '__main__':
