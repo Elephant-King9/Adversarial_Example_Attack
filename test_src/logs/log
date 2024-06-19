@@ -1,0 +1,11 @@
+2024-06-19 18:10:52.088 | CRITICAL | test_attack:<module>:26 - model_MNIST_path model not find
+2024-06-19 18:12:16.420 | INFO     | test_attack:<module>:19 - MNIST model loaded
+2024-06-19 18:12:58.221 | INFO     | test_attack:<module>:19 - MNIST model loaded
+2024-06-19 18:14:36.956 | INFO     | test_attack:<module>:19 - MNIST model loaded
+2024-06-19 18:25:13.937 | INFO     | test_attack:<module>:19 - MNIST model loaded
+2024-06-19 18:26:57.676 | INFO     | test_attack:<module>:19 - MNIST model loaded
+2024-06-19 18:27:26.573 | INFO     | __main__:<module>:19 - MNIST model loaded
+2024-06-19 18:27:57.005 | INFO     | __main__:<module>:19 - MNIST model loaded
+2024-06-19 18:29:53.294 | INFO     | __main__:<module>:19 - MNIST model loaded
+2024-06-19 18:30:30.368 | INFO     | __main__:<module>:19 - MNIST model loaded
+2024-06-19 18:31:35.393 | INFO     | __main__:<module>:19 - MNIST model loaded

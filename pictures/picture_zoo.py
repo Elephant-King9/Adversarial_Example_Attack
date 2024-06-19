@@ -4,7 +4,7 @@ from log_config import logger
 # 根据不同的攻击方式绘制图片
 def get_picture(config):
     if config.dataset == 'MNIST' and config.attack == 'FGSM':
-        from pictures.picture_MNIST_FSGM import Picture_MNIST_FSGM
+        from pictures.picture_MNIST_FGSM import Picture_MNIST_FSGM
         logger.info('print pictures')
         picture = Picture_MNIST_FSGM(config)
         picture.draw()
@@ -12,6 +12,11 @@ def get_picture(config):
         from pictures.picture_MNIST_IFGSM import Picture_MNIST_IFGSM
         logger.info('print pictures')
         picture = Picture_MNIST_IFGSM(config)
+        picture.draw()
+    elif config.dataset == 'MNIST' and config.attack == 'MIFGSM':
+        from pictures.picture_MNIST_MIFGSM import Picture_MNIST_MIFGSM
+        logger.info('print pictures')
+        picture = Picture_MNIST_MIFGSM(config)
         picture.draw()
     else:
         logger.warning('don\'t have pictures')

@@ -12,7 +12,7 @@ parser = argparse.ArgumentParser(description='select model dataset attack')
 
 parser.add_argument('-m', '--model', type=str, required=True, choices=['MNIST'], help='model type')
 parser.add_argument('-d', '--dataset', type=str, required=True, choices=['MNIST'], help='dataset type')
-parser.add_argument('-a', '--attack', type=str, required=True, choices=['FGSM', 'IFGSM'], help='attack type')
+parser.add_argument('-a', '--attack', type=str, required=True, choices=['FGSM', 'IFGSM', 'MIFGSM'], help='attack type')
 
 # 进行参数解析
 args = parser.parse_args()
@@ -54,6 +54,7 @@ class Config:
 
     # FGSM中代表扰动参数
     # IFGSM中代表迭代轮数
+    # MIFGSM中代表迭代轮数
     epsilons = [0, .05, .1, .15, .2, .25, .3]
 
     # 记录不同扰动下的准确度
@@ -63,12 +64,17 @@ class Config:
 
     # plt生成图像保存的文件夹路径
     plt_path = 'results/plt_pics'
+    # adv_pics图像保存路劲
+    adv_path = 'results/adv_pics'
 
     # IFGSM所需的参数
+    # MIFGSM所需的参数
     # 迭代步长
-    alpha = 1/50
-    # 迭代次数
-    # iters = 10
+    alpha = 1/75
+
+    # MIFGSM所需的参数
+    # 动量
+    momentum = 0.9
 
     # 显示参数
     def display(self):
@@ -85,9 +91,16 @@ class Config:
         print('------------DataLoader------------')
         print(f'batch_size: {self.batch_size}')
         print(f'shuffle: {self.shuffle}')
+        print('------------Save Path------------')
+        print(f'adv_path: {self.adv_path}')
+        print(f'plt_path: {self.plt_path}')
         if self.attack == 'IFGSM':
             print('------------IFGSM Attack------------')
             print(f'alpha: {self.alpha}')
+        if self.attack == 'MIFGSM':
+            print('------------MIFGSM Attack------------')
+            print(f'alpha: {self.alpha}')
+            print(f'momentum: {self.momentum}')
 
 
 if __name__ == '__main__':
