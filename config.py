@@ -41,7 +41,7 @@ class Config:
 
     # 数据集相关
     # 数据集是否下载
-    download = False
+    download = True
     # transform
     transform = torchvision.transforms.Compose([
         transforms.ToTensor(),

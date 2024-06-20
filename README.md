@@ -13,6 +13,3 @@ python config.py -m MNIST -d MNIST -a FGSM
 `-d` 为指定数据集
 
 `-a` 为指定攻击方式
-
-test_push
-test_pull
