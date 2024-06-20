@@ -1,4 +1,6 @@
 # 主函数
+import time
+
 from torch.utils.data import DataLoader
 
 from attack_flow import attack_flow
@@ -10,6 +12,7 @@ from log_config import logger
 
 
 def main(config):
+    sum_start_time = time.time()
     logger.info(f"train device is {config.device}")
     # 根据config中的model字段获取模型
     model = get_model(config)
@@ -36,3 +39,5 @@ def main(config):
         i = i + 1
     # 绘图
     get_picture(config)
+    sum_end_time = time.time()
+    logger.info(f"sum time is {sum_end_time - sum_start_time}")
