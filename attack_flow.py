@@ -97,10 +97,9 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
         mkdir(adv_dir)
         adv_dir = os.path.join(adv_dir, str(eps))
         mkdir(adv_dir)
-
-        adv_path = os.path.join(adv_dir, f"{i}_{init_pred}->{final_pred}.png")
-        # 如果图片尚未保存
-        if not os.path.exists(adv_path):
+        adv_path = os.path.join(adv_dir, f"{init_pred}->{final_pred}.png")
+        # 如果图片保存的不够5张
+        if not os.path.exists(len(os.listdir(adv_dir)) <= 5):
             img.save(adv_path)  # 保存图片到本地，文件名包含初始预测标签和最终预测标签
             logger.info(f"Adversarial example {i} saved")
         else:
