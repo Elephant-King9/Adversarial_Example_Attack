@@ -22,7 +22,7 @@ class Config:
     # 训练设备
 
     # NVIDIA
-    train_gpu = '1'
+    train_gpu = '5'
     device = torch.device('cuda:' + train_gpu if torch.cuda.is_available() else 'cpu')
 
     # Mac M1
@@ -64,12 +64,10 @@ class Config:
 
     # plt生成图像保存的文件夹路径
     plt_path = 'results/plt_pics'
-    # adv_pics图像保存路径
+    # adv_pics图像保存路劲
     adv_path = 'results/adv_pics'
     # 预训练文件保存路径
     pre_train_path = 'assets/Pre-training_files'
-
-
     # IFGSM所需的参数
     # MIFGSM所需的参数
     # 迭代步长
@@ -97,6 +95,7 @@ class Config:
         print('------------Save Path------------')
         print(f'adv_path: {self.adv_path}')
         print(f'plt_path: {self.plt_path}')
+        print(f'pre_train_path:{self.pre_train_path}')
         if self.attack == 'IFGSM':
             print('------------IFGSM Attack------------')
             print(f'alpha: {self.alpha}')
