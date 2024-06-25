@@ -106,12 +106,12 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
             if eps == 0 and len(adv_examples) < 5:
                 adv_ex = perturbed_data.squeeze().detach().cpu().numpy()
                 adv_examples.append((init_pred, final_pred, adv_ex))
-            if len(adv_examples) < 5:
+            if len(adv_examples) < 3:
                 adv_ex = perturbed_data.squeeze().detach().cpu().numpy()
                 adv_examples.append((init_pred, final_pred, adv_ex))
 
             # 用于测试，先把循环搞小点
-            if len(adv_examples) >= 5:
+            if len(adv_examples) >= 3:
                 break
 
     # 单独保存图片信息，只用MNIST数据集的时候才保存
