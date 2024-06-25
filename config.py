@@ -10,8 +10,8 @@ from contrast import main
 # 创建ArgumentParser，用于命令行
 parser = argparse.ArgumentParser(description='select model dataset attack')
 
-parser.add_argument('-m', '--model', type=str, required=True, choices=['MNIST'], help='model type')
-parser.add_argument('-d', '--dataset', type=str, required=True, choices=['MNIST'], help='dataset type')
+parser.add_argument('-m', '--model', type=str, required=True, choices=['MNIST', 'blip_caption'], help='model type')
+parser.add_argument('-d', '--dataset', type=str, required=True, choices=['MNIST', 'coco'], help='dataset type')
 parser.add_argument('-a', '--attack', type=str, required=True, choices=['FGSM', 'IFGSM', 'MIFGSM'], help='attack type')
 
 # 进行参数解析
@@ -57,7 +57,7 @@ class Config:
     # MIFGSM中代表迭代轮数
     epsilons = [0, .05, .1, .15, .2, .25, .3]
 
-    # 记录不同扰动下的准确度
+    # 记录不同扰动下的结果
     accuracies = []
     # 记录样本
     examples = []
@@ -76,6 +76,10 @@ class Config:
     # MIFGSM所需的参数
     # 动量
     momentum = 0.9
+
+    # BLIP所需的模型
+    # 图像的输入尺寸
+    blip_image_size = 480
 
     # 显示参数
     def display(self):

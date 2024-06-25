@@ -161,6 +161,11 @@ cython_debug/
 
 # My ignore
 
-
+# 日志信息
 /logs/*
+# 数据集
 /assets/datasets/*
+# BLIP预训练模型
+/assets/Pre-training_files/BLIP/*
+/assets/Pre-training_files/BERT/*
+

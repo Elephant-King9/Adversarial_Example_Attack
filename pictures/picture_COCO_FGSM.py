@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-class Picture_MNIST_FSGM:
+class Picture_COCO_FSGM:
     def __init__(self, config):
         # 扰动参数列表
         self.epsilons = config.epsilons
@@ -16,36 +16,6 @@ class Picture_MNIST_FSGM:
         self.plt_path = config.plt_path
 
     def draw(self):
-        # 3.绘图,用于可视化
-        # 创建一个新的图形对象，图形大小设置为 5x5 英寸
-        plt.figure(figsize=(5, 5))
-        # 用epsilons作为x轴数据，accuracies作为y轴数据
-        # *-代表数据点用*标记，点之间用直线链接
-        plt.plot(self.epsilons, self.accuracies, "*-")
-        # 设置y轴刻度，
-        # np.arange(0, 1.1, step=0.1)生成0~1的数组，步长为0.1
-        plt.yticks(np.arange(0, 1.1, step=0.1))
-        # 设置x轴刻度
-        # 生成0~0.3的数组，步长为0.05
-        plt.xticks(np.arange(0, .35, step=0.05))
-        # 将图标标题设为Accuracy vs Epsilon
-        plt.title("Accuracy vs Epsilon")
-        # x轴标签为Epsilon
-        plt.xlabel("Epsilon")
-        # y轴标签为Accuracy
-        plt.ylabel("Accuracy")
-
-        pic_name = 'MNIST_FSGM1.png'
-        # 图片不存在的时候再保存
-        if not os.path.exists(os.path.join(self.plt_path, pic_name)):
-            plt.savefig(os.path.join(self.plt_path, pic_name))
-            logger.info(f'save {pic_name} successfully')
-        else:
-            logger.warning(f'{pic_name} is saved')
-
-        # 显示图表
-        plt.show()
-
         cnt = 0
         plt.figure(figsize=(8, 10))
         # 行代表不同的epsilon
@@ -64,7 +34,7 @@ class Picture_MNIST_FSGM:
         plt.tight_layout()
 
         # 保存图片
-        pic_name = 'MNIST_FSGM2.png'
+        pic_name = 'COCO_FSGM1.png'
         if not os.path.exists(os.path.join(self.plt_path, pic_name)):
             plt.savefig(os.path.join(self.plt_path, pic_name))
             logger.info(f'save {pic_name} successfully')

@@ -2,35 +2,39 @@
 import torch
 from torch import nn
 
-
-class model_MNIST(nn.Module):
-    def __init__(self):
-        super(model_MNIST, self).__init__()
-        self.conv1 = nn.Conv2d(1, 32, kernel_size=3, stride=1, padding=1)
-        self.relu1 = nn.ReLU()
-        self.pool1 = nn.MaxPool2d(2, stride=2)
-        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
-        self.relu2 = nn.ReLU()
-        self.pool2 = nn.MaxPool2d(2, stride=2)
-        self.flatten = nn.Flatten()
-        self.fc1 = nn.Linear(3136, 128)
-        self.fc2 = nn.Linear(128, 10)
-
-    def forward(self, x):
-        x = self.conv1(x)
-        x = self.relu1(x)
-        x = self.pool1(x)
-        x = self.conv2(x)
-        x = self.relu2(x)
-        x = self.pool2(x)
-        x = self.flatten(x)
-        x = self.fc1(x)
-        x = self.fc2(x)
-        return x
+from models import model_base
+from networks.MNIST import MNIST
 
 
-if __name__ == '__main__':
-    model = model_MNIST()
-    input = torch.ones((1, 1, 28, 28))
-    output = model(input)
-    print(output)
+class model_MNIST:
+    def __init__(self, config, pretrained_model_path):
+        self.config = config
+        self.model = MNIST()
+        self.model = self.model.to(self.config.device)
+        self.model.load_state_dict(torch.load(pretrained_model_path))
+        self.model.eval()
+
+    # 计算损失
+    def clac_loss(self, image, label):
+        loss = torch.nn.functional.nll_loss(self.model(image), label)
+        return loss
+
+    # 计算图片梯度
+    def calc_image_grad(self, image, label):
+        # 将梯度与原图剥离
+        image = image.clone().detach().to(self.config.device)
+        # 允许获取梯度
+        image.requires_grad = True
+        # 计算损失
+        loss = self.clac_loss(image, label)
+        # 梯度清零
+        self.model.zero_grad()
+        # 反向传播梯度
+        loss.backward()
+        # 获取梯度信息
+        data_grad = image.grad.data
+        # 返回梯度信息
+        return data_grad
+
+    def predict(self, image):
+        return self.model.forward(image)

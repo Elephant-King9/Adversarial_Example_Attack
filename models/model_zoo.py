@@ -14,27 +14,30 @@ def get_model(config):
     if config.model == 'MNIST':
         from models.model_MNIST import model_MNIST
         # 如果预训练模型未找到 则加载文件
-        save_path = os.path.join(config.pre_train_path, 'MNIST')
-        save_path = judge_device(config.device, save_path)
+        pretrained_model_path = os.path.join(config.pre_train_path, 'MNIST')
+        pretrained_model_path = judge_device(config.device, pretrained_model_path)
         # 最终训练模型的文件
-        save_path = os.path.join(save_path, 'model_MNIST_10.pth')
+        pretrained_model_path = os.path.join(pretrained_model_path, 'model_MNIST_10.pth')
 
-        if os.path.exists(save_path):
-            logger.info('MNIST model loaded')
-        else:
+        if not os.path.exists(pretrained_model_path):
             from train_model.train_MNIST import train_MNIST
             # 预训练模型未找到
             logger.info('model_MNIST_path model not find,pretrain start')
             train_MNIST = train_MNIST(config)
             train_MNIST.train()
 
-        # 加载字典形式的预训练模型，并使用GPU训练
-        # 定义和导入参数这两句还得分开写
-        model = model_MNIST().to(config.device)
-        model.load_state_dict(torch.load(save_path))
+        logger.info('MNIST model loaded')
+
+        model = model_MNIST(config, pretrained_model_path)
+        return model
+    # 如果是blip模型，model_blip_caption模型的定义在这里
+    elif config.model == 'blip_caption':
+        from models.model_blip_caption import model_blip_caption
+        # 这一步包含了加载预训练模型，与.to(device)
+        model = model_blip_caption(config)
+        logger.info('blip_caption model loaded')
         return model
 
     else:
         logger.critical('Model not recognized')
         exit()
-    return
