@@ -11,7 +11,8 @@ class attack_MIFGSM:
 
     def attack(self, image, epsilon, label):
         # 反向归一化处理
-        perturbed_image = denorm(image, self.config.device)
+        # perturbed_image = denorm(image, self.config.device)
+        perturbed_image = image
         # 创建一个shape和perturbed_image相同的tensor类型张量，但是所有参数都为0
         # 相当于公式中的g~0~参数，论文要求一开始初始化为0
         momentum = torch.zeros_like(perturbed_image).to(self.config.device)

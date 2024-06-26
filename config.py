@@ -45,7 +45,7 @@ class Config:
     # transform
     transform = torchvision.transforms.Compose([
         transforms.ToTensor(),
-        transforms.Normalize((0.1307,), (0.3081,)),
+        # transforms.Normalize((0.1307,), (0.3081,)),
     ])
 
     # DataLoader相关

@@ -20,7 +20,8 @@ class attack_FGSM:
         :return:
         """
         # 恢复图片到原始尺度,进行反归一化
-        perturbed_image = denorm(image, self.config.device)
+        # perturbed_image = denorm(image, self.config.device)
+        perturbed_image = image
 
         # 获取梯度方向
         sign_data_grad = self.model.calc_image_grad(perturbed_image, label).sign()

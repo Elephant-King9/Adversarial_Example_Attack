@@ -99,8 +99,11 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
             # 攻击后生成新的图像
             perturbed_data = attacker.attack(image, eps, annotations)
             # 将攻击后生成的图像重新进行标准化
-            perturbed_data = transforms.Normalize((0.48145466, 0.4578275, 0.40821073),
-                                                  (0.26862954, 0.26130258, 0.27577711))(perturbed_data)
+            # perturbed_data = transforms.Normalize((0.48145466, 0.4578275, 0.40821073),
+            #                                       (0.26862954, 0.26130258, 0.27577711))(perturbed_data)
+            # 测试图像标准化问题，先注释掉
+            # perturbed_data_normalized = transforms.Normalize((0.1307,), (0.3081,))(perturbed_data)
+
             # 对攻击后生成的新图像生成预测结果
             final_pred = model.predict(image_id, perturbed_data, image_unnorm, display=True)
             if eps == 0 and len(adv_examples) < 5:

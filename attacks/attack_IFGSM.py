@@ -19,8 +19,9 @@ class attack_IFGSM:
         :return: 生成的对抗样本
         """
         # 反向归一化处理
-        perturbed_image = denorm(image, self.config.device)
-
+        # 测试，先注释掉
+        # perturbed_image = denorm(image, self.config.device)
+        perturbed_image = image
         # 进行多轮迭代，迭代的次数为当前的epsilon值
         for _ in range(epsilon):
             sign_data_grad = self.model.calc_image_grad(perturbed_image, label).sign()
