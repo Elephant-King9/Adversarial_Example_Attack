@@ -15,6 +15,6 @@ class attack_speckle_noise:
         c = [.15, .2, 0.35, 0.45, 0.6][epsilon - 1]
 
         image = np.array(image)
-        perturbed_image = np.clip(image + image * np.random.normal(size=x.shape, scale=c), 0, 1)
+        perturbed_image = np.clip(image + image * np.random.normal(size=image.shape, scale=c), 0, 1)
         perturbed_image = torch.from_numpy(perturbed_image).float().to(self.config.device)
         return perturbed_image
