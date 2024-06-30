@@ -32,6 +32,7 @@ def save_image(config, adv_examples, eps):
             adv_ex = np.clip(adv_ex, 0, 255)
         # plt.imshow(adv_ex)
         # plt.show()
+        img = Image.fromarray(adv_ex)  # 使用PIL库将NumPy数组转换为图片
 
         # 保存对抗样本图片
         # 创建多级文件夹，防止生成结果太乱了
@@ -51,7 +52,7 @@ def save_image(config, adv_examples, eps):
             exit()
         # 如果图片保存的不够5张
         if os.path.exists(len(os.listdir(adv_dir)) <= 5):
-            adv_ex.save(adv_path)  # 保存图片到本地，文件名包含初始预测标签和最终预测标签
+            img.save(adv_path)  # 保存图片到本地，文件名包含初始预测标签和最终预测标签
             logger.info(f"Adversarial example {i} saved")
         else:
             logger.warning(f"Adversarial example {i} has been saved!")
