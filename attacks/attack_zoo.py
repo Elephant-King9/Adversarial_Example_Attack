@@ -31,6 +31,14 @@ def get_attack(model, val_DataLoader, config):
         logger.info('Gaussian noise attack loaded')
         logger.info(f'Gaussian noise iters: {config.epsilons}')
         return attacker
+    elif config.attack == 'shot_noise':
+        from attacks.attack_shot_noise import attack_shot_noise
+        attacker = attack_shot_noise(model, config)
+        config.epsilons = [1, 2, 3, 4, 5]
+        logger.info('Shot noise attack loaded')
+        logger.info(f'Shot noise iters: {config.epsilons}')
+        return attacker
+
     else:
         logger.critical(f'Attack {config.attacker} not recognized')
         exit()
