@@ -2,7 +2,8 @@ import numpy as np
 import torch
 from skimage.filters import gaussian
 
-# 散斑噪声攻击
+
+# 高斯模糊攻击
 class attack_gaussian_blur:
     def __init__(self, model, config):
         self.config = config

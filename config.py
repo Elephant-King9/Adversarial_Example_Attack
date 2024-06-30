@@ -12,7 +12,9 @@ parser = argparse.ArgumentParser(description='select model dataset attack')
 
 parser.add_argument('-m', '--model', type=str, required=True, choices=['MNIST', 'blip_caption'], help='model type')
 parser.add_argument('-d', '--dataset', type=str, required=True, choices=['MNIST', 'coco'], help='dataset type')
-parser.add_argument('-a', '--attack', type=str, required=True, choices=['FGSM', 'IFGSM', 'MIFGSM', 'gaussian_noise', 'shot_noise', 'impulse_noise', 'speckle_noise', 'gaussian_blur'], help='attack type')
+parser.add_argument('-a', '--attack', type=str, required=True, choices=['FGSM', 'IFGSM', 'MIFGSM', 'gaussian_noise',
+                                                                        'shot_noise', 'impulse_noise', 'speckle_noise', 'gaussian_blur',
+                                                                        'defocus_blur'], help='attack type')
 
 # 进行参数解析
 args = parser.parse_args()
