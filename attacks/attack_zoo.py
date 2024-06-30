@@ -52,6 +52,13 @@ def get_attack(model, val_DataLoader, config):
         logger.info('Speckle noise attack loaded')
         logger.info(f'Speckle noise iters: {config.epsilons}')
         return attacker
+    elif config.attack == 'gaussian_blur':
+        from attacks.attack_gaussian_blur import attack_gaussian_blur
+        attacker = attack_gaussian_blur(model, config)
+        config.epsilons = [1, 2, 3, 4, 5]
+        logger.info('Gaussian blur attack loaded')
+        logger.info(f'Gaussian blur iters: {config.epsilons}')
+        return attacker
     else:
         logger.critical(f'Attack {config.attacker} not recognized')
         exit()
