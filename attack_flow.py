@@ -1,14 +1,8 @@
 # 用于测试FGSM方法根据不同扰动对准确率的影响
-import os.path
 import time
-
-import numpy as np
-import torch
-from PIL import Image
 from torchvision import transforms
 
-from log_config import logger
-from utils.mkdir import mkdir
+from utils.save_image import save_image
 
 
 def attack_flow(eps, attacker, model, val_DataLoader, config):
@@ -116,6 +110,7 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
             # 用于测试，先把循环搞小点
             if len(adv_examples) >= 3:
                 break
+    save_image(config, adv_examples, eps)
 
     # 单独保存图片信息，只用MNIST数据集的时候才保存
     if config.dataset == 'MNIST':
@@ -124,30 +119,6 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
         end_time = time.time()
         print(
             f"Epsilon: {eps}\tTest Accuracy = {accuracy} / {len(val_DataLoader)} = {final_acc}, Time = {end_time - start_time}")
-
-        # 将对抗样本保存为图片
-        for i, (init_pred, final_pred, adv_ex) in enumerate(adv_examples):
-            # 将图像归一化到0-255范围并转换为uint8类型
-            adv_ex = (adv_ex * 255).astype(np.uint8)
-            if adv_ex.shape[0] == 1:  # 如果是单通道图像，调整为(height, width)形状
-                adv_ex = adv_ex[0]
-            img = Image.fromarray(adv_ex)  # 使用PIL库将NumPy数组转换为图片
-
-            # 保存对抗样本图片
-            # 创建多级文件夹，防止生成结果太乱了
-            adv_dir = os.path.join(config.adv_path, config.attack)
-            mkdir(adv_dir)
-            adv_dir = os.path.join(adv_dir, config.dataset)
-            mkdir(adv_dir)
-            adv_dir = os.path.join(adv_dir, str(eps))
-            mkdir(adv_dir)
-            adv_path = os.path.join(adv_dir, f"{init_pred}->{final_pred}.png")
-            # 如果图片保存的不够5张
-            if not os.path.exists(len(os.listdir(adv_dir)) <= 5):
-                img.save(adv_path)  # 保存图片到本地，文件名包含初始预测标签和最终预测标签
-                logger.info(f"Adversarial example {i} saved")
-            else:
-                logger.warning(f"Adversarial example {i} has been saved!")
         # Return the accuracy and an adversarial example
         return final_acc, adv_examples
     else:
