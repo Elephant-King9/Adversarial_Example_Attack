@@ -1,9 +1,12 @@
 # 用于测试FGSM方法根据不同扰动对准确率的影响
 import time
+
+import numpy as np
+from matplotlib import pyplot as plt
 from torchvision import transforms
 
 from utils.save_image import save_image
-
+from log_config import logger
 
 def attack_flow(eps, attacker, model, val_DataLoader, config):
     accuracy = 0
@@ -100,6 +103,15 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
 
             # 对攻击后生成的新图像生成预测结果
             final_pred = model.predict(image_id, perturbed_data, image_unnorm, display=True)
+
+            # 测试输出图片
+            # test_image = perturbed_data.cpu().numpy()
+            # test_image = test_image.squeeze(0)
+            # logger.debug(f"image_shape: {perturbed_data.shape}")
+            # test_image = np.transpose(test_image, (1, 2, 0))
+            # plt.imshow(test_image)
+            # plt.show()
+
             if eps == 0 and len(adv_examples) < 5:
                 adv_ex = perturbed_data.squeeze().detach().cpu().numpy()
                 adv_examples.append((init_pred, final_pred, adv_ex))
