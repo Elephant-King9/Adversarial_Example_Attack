@@ -45,6 +45,13 @@ def get_attack(model, val_DataLoader, config):
         logger.info('Impulse noise attack loaded')
         logger.info(f'Impulse noise iters: {config.epsilons}')
         return attacker
+    elif config.attack == 'speckle_noise':
+        from attacks.attack_speckle_noise import attack_speckle_noise
+        attacker = attack_speckle_noise(model, config)
+        config.epsilons = [1, 2, 3, 4, 5]
+        logger.info('Speckle noise attack loaded')
+        logger.info(f'Speckle noise iters: {config.epsilons}')
+        return attacker
     else:
         logger.critical(f'Attack {config.attacker} not recognized')
         exit()
