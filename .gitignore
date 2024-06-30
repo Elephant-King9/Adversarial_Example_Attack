@@ -167,5 +167,6 @@ cython_debug/
 /assets/datasets/*
 # BLIP预训练模型
 /assets/Pre-training_files/BLIP/*
+# BERT预训练模型
 /assets/Pre-training_files/BERT/*
 
