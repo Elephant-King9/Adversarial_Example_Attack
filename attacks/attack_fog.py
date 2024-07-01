@@ -22,15 +22,15 @@ class attack_fog:
         w = image.shape[1]
         c = [(1.5, 2), (2, 2), (2.5, 1.7), (2.5, 1.5), (3, 1.4)][epsilon - 1]
 
-        image = np.array(image) / 255.
+        image = np.array(image)
         max_val = image.max()
         tmp = c[0] * self.plasma_fractal(wibbledecay=c[1])[:h, :w][..., np.newaxis]
         image = image + tmp
-        perturbed_image = np.clip(x * max_val / (max_val + c[0]), 0, 1)
+        perturbed_image = np.clip(image * max_val / (max_val + c[0]), 0, 1)
+        perturbed_image = perturbed_image.transpose((2, 0, 1))
         perturbed_image = torch.from_numpy(perturbed_image).float().to(self.config.device)
         perturbed_image = perturbed_image.unsqueeze(0)
-        logger.debug(
-            f'perturbed_image shape:{perturbed_image.shape}')  # perturbed_image shape:torch.Size([1, 3, 480, 480])
+        logger.debug(f'perturbed_image shape:{perturbed_image.shape}')  # perturbed_image shape:torch.Size([1, 3, 480, 480])
         return perturbed_image
 
     def plasma_fractal(self, mapsize=1024, wibbledecay=3):
