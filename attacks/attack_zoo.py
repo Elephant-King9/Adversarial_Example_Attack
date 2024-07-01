@@ -80,6 +80,13 @@ def get_attack(model, val_DataLoader, config):
         logger.info('Fog attack loaded')
         logger.info(f'Fog iters: {config.epsilons}')
         return attacker
+    elif config.attack == 'frost':
+        from attacks.attack_frost import attack_frost
+        attacker = attack_frost(model, config)
+        config.epsilons = [1, 2, 3, 4, 5]
+        logger.info('Frost attack loaded')
+        logger.info(f'Frost iters: {config.epsilons}')
+        return attacker
     else:
         logger.critical(f'Attack {config.attacker} not recognized')
         exit()
