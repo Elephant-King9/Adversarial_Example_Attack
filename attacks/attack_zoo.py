@@ -101,6 +101,13 @@ def get_attack(model, val_DataLoader, config):
         logger.info('Spatter attack loaded')
         logger.info(f'Spatter iters: {config.epsilons}')
         return attacker
+    elif config.attack == 'contrast':
+        from attacks.attack_contrast import attack_contrast
+        attacker = attack_contrast(model, config)
+        config.epsilons = [1, 2, 3, 4, 5]
+        logger.info('Contrast attack loaded')
+        logger.info(f'Contrast iters: {config.epsilons}')
+        return attacker
     else:
         logger.critical(f'Attack {config.attacker} not recognized')
         exit()
