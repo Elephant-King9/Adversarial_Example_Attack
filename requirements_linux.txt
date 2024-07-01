@@ -25,6 +25,7 @@ mkl-service==2.4.0
 mpmath @ file:///croot/mpmath_1690848262763/work
 networkx @ file:///croot/networkx_1690561992265/work
 numpy @ file:///work/mkl/numpy_and_numpy_base_1682953417311/work
+opencv-python==4.10.0.84
 packaging==24.1
 pandas==2.0.3
 pillow @ file:///croot/pillow_1714398848491/work
