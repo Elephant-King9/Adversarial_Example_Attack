@@ -34,4 +34,4 @@ class attack_pixelate:
         perturbed_image = perturbed_image.unsqueeze(0)
         logger.debug(
             f'perturbed_image shape:{perturbed_image.shape}')  # perturbed_image shape:torch.Size([1, 3, 480, 480])
-        return perturbed_image
+        return perturbed_image / 255

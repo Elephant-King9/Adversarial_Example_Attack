@@ -125,7 +125,7 @@ def get_attack(model, val_DataLoader, config):
     elif config.attack == 'pixelate':
         from attacks.attack_pixelate import attack_pixelate
         attacker = attack_pixelate(model, config)
-        config.epsilons = [1, 2, 3, 4, 5, 6]
+        config.epsilons = [1, 2, 3, 4, 5]
         logger.info('Pixelate attack loaded')
         logger.info(f'Pixelate iters: {config.epsilons}')
         return attacker
