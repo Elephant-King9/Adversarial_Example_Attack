@@ -17,7 +17,7 @@ class attack_gaussian_blur:
         c = [1, 2, 3, 4, 6][epsilon - 1]
 
         image = gaussian(np.array(image), sigma=c)
-        perturbed_image = np.clip(image, 0, 1
+        perturbed_image = np.clip(image, 0, 1)
         perturbed_image = torch.from_numpy(perturbed_image).float().to(self.config.device)
         logger.debug(f'perturbed_image shape{perturbed_image.shape}')
         return perturbed_image
