@@ -37,7 +37,7 @@ class attack_glass_blur:
                     # swap
                     x[h, w], x[h_prime, w_prime] = x[h_prime, w_prime], x[h, w]
 
-        perturbed_image = np.clip(gaussian(x / 255., sigma=c[0], multichannel=True), 0, 1)
+        perturbed_image = np.clip(gaussian(x / 255., sigma=c[0]), 0, 1)
 
         perturbed_image = perturbed_image.transpose((2, 0, 1))
         perturbed_image = torch.from_numpy(perturbed_image).float().to(self.config.device)
