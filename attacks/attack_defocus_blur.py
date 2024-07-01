@@ -15,7 +15,7 @@ class attack_defocus_blur:
         image = image.cpu().numpy()
         logger.debug(f'image shape before:{image.shape}')   # image shape:(1, 3, 480, 480)
         image = image.squeeze(0)
-        image= np.array(image).transpose((1, 2, 0))
+        image = np.array(image).transpose((1, 2, 0))
         logger.debug(f'image shape after:{image.shape}')    # image shape after:(480, 480, 3)
 
         c = [(3, 0.1), (4, 0.5), (6, 0.5), (8, 0.5), (10, 0.5)][epsilon - 1]

@@ -5,7 +5,7 @@ from scipy.ndimage import zoom as scizoom
 from log_config import logger
 
 
-# 高斯模糊攻击
+# 变焦模糊攻击
 class attack_zoom_blur:
     def __init__(self, model, config):
         self.config = config

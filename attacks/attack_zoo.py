@@ -73,6 +73,13 @@ def get_attack(model, val_DataLoader, config):
         logger.info('Zoom blur attack loaded')
         logger.info(f'Zoom blur iters: {config.epsilons}')
         return attacker
+    elif config.attack == 'fog':
+        from attacks.attack_fog import attack_fog
+        attacker = attack_fog(model, config)
+        config.epsilons = [1, 2, 3, 4, 5]
+        logger.info('Fog attack loaded')
+        logger.info(f'Fog iters: {config.epsilons}')
+        return attacker
     else:
         logger.critical(f'Attack {config.attacker} not recognized')
         exit()
