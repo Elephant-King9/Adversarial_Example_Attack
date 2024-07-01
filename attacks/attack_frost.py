@@ -3,8 +3,6 @@ import numpy as np
 import torch
 from log_config import logger
 
-dir = "./assets/frost_img"
-
 
 # 散焦模糊攻击
 class attack_frost:
@@ -13,7 +11,7 @@ class attack_frost:
         self.model = model
 
     def attack(self, image, epsilon, label):
-        
+
         image = image * 255
         # 将tensor数据类型的图片转化为numpy
         image = image.cpu().numpy()
