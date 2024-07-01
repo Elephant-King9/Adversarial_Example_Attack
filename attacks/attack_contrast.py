@@ -23,7 +23,7 @@ class attack_contrast:
 
         image = np.array(image) / 255.
         means = np.mean(image, axis=(0, 1), keepdims=True)
-        perturbed_image = np.clip((x - means) * c + means, 0, 1)
+        perturbed_image = np.clip((image - means) * c + means, 0, 1)
 
         perturbed_image = perturbed_image.transpose((2, 0, 1))
         perturbed_image = torch.from_numpy(perturbed_image).float().to(self.config.device)
