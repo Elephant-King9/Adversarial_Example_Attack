@@ -9,7 +9,6 @@ from wand.image import Image as WandImage
 from wand.api import library as wandlibrary
 
 
-
 # 散焦模糊攻击
 class attack_snow:
     def __init__(self, model, config):
@@ -29,22 +28,14 @@ class attack_snow:
         h = image.shape[0]
         w = image.shape[1]
 
-        if h > 224 and w > 224:
-            img_h, img_w = np.random.randint(0, h - 224), np.random.randint(0, w - 224)
-        else:
-            img_h, img_w = 0, 0
-        # x = x[img_h:img_h + 224, img_w:img_w + 224][..., [2, 1, 0]]
-        image = image[img_h:img_h + min(224, h), img_w:img_w + min(224, w)][..., [2, 1, 0]]
-        # print("x:", x.shape)
-
         c = [(0.1, 0.3, 3, 0.5, 10, 4, 0.8),
              (0.2, 0.3, 2, 0.5, 12, 4, 0.7),
              (0.55, 0.3, 4, 0.9, 12, 8, 0.7),
              (0.55, 0.3, 4.5, 0.85, 12, 8, 0.65),
-             (0.55, 0.3, 2.5, 0.85, 12, 12, 0.55)][severity - 1]
+             (0.55, 0.3, 2.5, 0.85, 12, 12, 0.55)][epsilon - 1]
 
         image = np.array(image, dtype=np.float32) / 255.
-        snow_layer = np.random.normal(size=x.shape[:2], loc=c[0], scale=c[1])  # [:2] for monochrome
+        snow_layer = np.random.normal(size=image.shape[:2], loc=c[0], scale=c[1])  # [:2] for monochrome
 
         snow_layer = self.clipped_zoom(snow_layer[..., np.newaxis], c[2])
         snow_layer[snow_layer < c[3]] = 0
@@ -60,15 +51,8 @@ class attack_snow:
                                   cv2.IMREAD_UNCHANGED) / 255.
         snow_layer = snow_layer[..., np.newaxis]
 
-        if h > 224 and w > 224:
-            image = c[6] * image + (1 - c[6]) * np.maximum(image,
-                                                           cv2.cvtColor(image, cv2.COLOR_RGB2GRAY).reshape(224, 224,
-                                                                                                           1) * 1.5 + 0.5)
-        else:
-            image = c[6] * image + (1 - c[6]) * np.maximum(image,
-                                                           cv2.cvtColor(image, cv2.COLOR_RGB2GRAY).reshape(min(224, h),
-                                                                                                           min(224, w),
-                                                                                                           1) * 1.5 + 0.5)
+        image = c[6] * image + (1 - c[6]) * np.maximum(image,
+                                                       cv2.cvtColor(image, cv2.COLOR_RGB2GRAY).reshape(h, w, 1) * 1.5 + 0.5)
 
         perturbed_image = np.clip(image + snow_layer + np.rot90(snow_layer, k=2), 0, 1)
         perturbed_image = perturbed_image.transpose((2, 0, 1))
