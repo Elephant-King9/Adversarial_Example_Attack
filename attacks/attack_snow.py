@@ -9,7 +9,7 @@ from wand.image import Image as WandImage
 from wand.api import library as wandlibrary
 
 
-# 散焦模糊攻击
+# 雪攻击
 class attack_snow:
     def __init__(self, model, config):
         self.config = config

@@ -4,7 +4,7 @@ import torch
 from log_config import logger
 
 
-# 散焦模糊攻击
+# 雾攻击
 class attack_fog:
     def __init__(self, model, config):
         self.config = config

@@ -94,6 +94,13 @@ def get_attack(model, val_DataLoader, config):
         logger.info('Snow attack loaded')
         logger.info(f'Snow iters: {config.epsilons}')
         return attacker
+    elif config.attack == 'spatter':
+        from attacks.attack_spatter import attack_spatter
+        attacker = attack_spatter(model, config)
+        config.epsilons = [1, 2, 3, 4, 5]
+        logger.info('Spatter attack loaded')
+        logger.info(f'Spatter iters: {config.epsilons}')
+        return attacker
     else:
         logger.critical(f'Attack {config.attacker} not recognized')
         exit()
