@@ -136,6 +136,13 @@ def get_attack(model, val_DataLoader, config):
         logger.info('Elastic attack loaded')
         logger.info(f'Elastic iters: {config.epsilons}')
         return attacker
+    elif config.attack == 'glass_blur':
+        from attacks.attack_glass_blur import attack_glass_blur
+        attacker = attack_glass_blur(model, config)
+        config.epsilons = [1, 2, 3, 4, 5]
+        logger.info('Glass blur loaded')
+        logger.info(f'Glass blur iters: {config.epsilons}')
+        return attacker
     else:
         logger.critical(f'Attack {config.attacker} not recognized')
         exit()
