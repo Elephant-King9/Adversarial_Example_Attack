@@ -16,7 +16,7 @@ parser.add_argument('-a', '--attack', type=str, required=True, choices=['FGSM', 
                                                                         'shot_noise', 'impulse_noise', 'speckle_noise', 'gaussian_blur',
                                                                         'defocus_blur', 'zoom_blur', 'fog', 'frost', 'snow', 'spatter',
                                                                         'contrast', 'brightness', 'saturate', 'pixelate', 'elastic',
-                                                                        'glass_blur'], help='attack type')
+                                                                        'glass_blur', 'motion_blur'], help='attack type')
 
 # 进行参数解析
 args = parser.parse_args()
