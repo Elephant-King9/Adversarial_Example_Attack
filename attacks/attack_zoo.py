@@ -122,6 +122,13 @@ def get_attack(model, val_DataLoader, config):
         logger.info('Saturate attack loaded')
         logger.info(f'Saturate iters: {config.epsilons}')
         return attacker
+    elif config.attack == 'pixelate':
+        from attacks.attack_pixelate import attack_pixelate
+        attacker = attack_pixelate(model, config)
+        config.epsilons = [1, 2, 3, 4, 5, 6]
+        logger.info('Pixelate attack loaded')
+        logger.info(f'Pixelate iters: {config.epsilons}')
+        return attacker
     else:
         logger.critical(f'Attack {config.attacker} not recognized')
         exit()
