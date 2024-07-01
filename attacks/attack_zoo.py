@@ -115,6 +115,13 @@ def get_attack(model, val_DataLoader, config):
         logger.info('Brightness attack loaded')
         logger.info(f'Brightness iters: {config.epsilons}')
         return attacker
+    elif config.attack == 'saturate':
+        from attacks.attack_saturate import attack_saturate
+        attacker = attack_saturate(model, config)
+        config.epsilons = [1, 2, 3, 4, 5]
+        logger.info('Saturate attack loaded')
+        logger.info(f'Saturate iters: {config.epsilons}')
+        return attacker
     else:
         logger.critical(f'Attack {config.attacker} not recognized')
         exit()
