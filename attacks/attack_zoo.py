@@ -129,6 +129,13 @@ def get_attack(model, val_DataLoader, config):
         logger.info('Pixelate attack loaded')
         logger.info(f'Pixelate iters: {config.epsilons}')
         return attacker
+    elif config.attack == 'elastic':
+        from attacks.attack_elastic import attack_elastic
+        attacker = attack_elastic(model, config)
+        config.epsilons = [1, 2, 3, 4, 5]
+        logger.info('Elastic attack loaded')
+        logger.info(f'Elastic iters: {config.epsilons}')
+        return attacker
     else:
         logger.critical(f'Attack {config.attacker} not recognized')
         exit()
