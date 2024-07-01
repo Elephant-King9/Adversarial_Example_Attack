@@ -28,10 +28,8 @@ class attack_motion_blur:
         image = image * 255
         # 将tensor数据类型的图片转化为numpy
         image = image.cpu().numpy()
-        print(f'image shape before:{image.shape}')  # image shape:(1, 3, 480, 480)
         image = image.squeeze(0)
         image = np.array(image).transpose((1, 2, 0))
-        print(f'image shape after:{image.shape}')  # image shape after:(480, 480, 3)
 
         c = [(10, 3), (15, 5), (15, 8), (15, 12), (20, 15)][epsilon - 1]
 
@@ -56,6 +54,4 @@ class attack_motion_blur:
         perturbed_image = torch.from_numpy(perturbed_image).float().to(self.config.device)
         perturbed_image = perturbed_image.unsqueeze(0)
         print(f'perturbed_image shape:{perturbed_image.shape}')  # perturbed_image shape:torch.Size([1, 3, 480, 480])
-        plt.imshow(perturbed_image)
-        plt.show()
         return perturbed_image
