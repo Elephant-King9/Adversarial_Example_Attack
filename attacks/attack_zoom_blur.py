@@ -2,6 +2,7 @@ import numpy as np
 import torch
 from log_config import logger
 from scipy.ndimage import zoom as scizoom
+from log_config import logger
 
 
 # 高斯模糊攻击
@@ -13,6 +14,9 @@ class attack_zoom_blur:
     def attack(self, image, epsilon, label):
         # 将tensor数据类型的图片转化为numpy
         image = image.cpu().numpy()
+        image = image.squeeze(0)
+        image= np.array(image).transpose((1, 2, 0))
+        logger.debug(f'image shape after:{image.shape}')    # image shape after:(480, 480, 3)
 
         c = [np.arange(1, 1.11, 0.01),
              np.arange(1, 1.16, 0.01),
@@ -29,8 +33,10 @@ class attack_zoom_blur:
             out = tmp + out
 
         image = (image + out) / (len(c) + 1)
-        perturbed_image = np.clip(x, 0, 1)
+        perturbed_image = np.clip(image, 0, 1)
+        perturbed_image = perturbed_image.transpose((2, 0, 1))
         perturbed_image = torch.from_numpy(perturbed_image).float().to(self.config.device)
+        perturbed_image = perturbed_image.unsqueeze(0)
         logger.debug(f'perturbed_image shape{perturbed_image.shape}')
         return perturbed_image
 
