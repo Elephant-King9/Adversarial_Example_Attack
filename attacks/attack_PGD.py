@@ -27,7 +27,7 @@ class attack_PGD:
         perturbed_image = image.clone()
 
         # PGD 的随机初始化步骤 - 与 IFGSM 的区别 1
-        random_start = torch.empty_like(perturbed_image).uniform_(-epsilon, epsilon)
+        random_start = torch.empty_like(perturbed_image).uniform_(-self.eps, self.eps)
         perturbed_image = torch.clamp(perturbed_image + random_start, 0, 1)
 
         # 进行多轮迭代，迭代的次数为预设的步数
@@ -35,7 +35,7 @@ class attack_PGD:
             sign_data_grad = self.model.calc_image_grad(perturbed_image, label).sign()
             perturbed_image = perturbed_image + self.config.alpha * sign_data_grad
             # 投影步骤，确保扰动在 epsilon 限制范围内 - 与 IFGSM 的区别 3
-            perturbed_image = torch.clamp(perturbed_image, image - epsilon, image + epsilon)
+            perturbed_image = torch.clamp(perturbed_image, image - self.eps, image + self.eps)
             perturbed_image = torch.clamp(perturbed_image, 0, 1).detach()
 
         return perturbed_image

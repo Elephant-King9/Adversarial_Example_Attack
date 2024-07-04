@@ -75,6 +75,7 @@ class Config:
     pre_train_path = 'assets/Pre-training_files'
     # IFGSM所需的参数
     # MIFGSM所需的参数
+    # PGD所需的参数
     # 迭代步长
     alpha = 1/75
 
