@@ -150,6 +150,13 @@ def get_attack(model, val_DataLoader, config):
         logger.info('Motion blur attack loaded')
         logger.info(f'Motion blur iters: {config.epsilons}')
         return attacker
+    elif config.attack == 'PGD':
+        from attacks.attack_PGD import attack_PGD
+        attack = attack_PGD(model, config)
+        config.epsilons = [0, 5, 10, 15, 20]
+        logger.info('PGD attack loaded')
+        logger.info(f'PGD iters: {config.epsilons}')
+        return attack
     else:
         logger.critical(f'Attack {config.attacker} not recognized')
         exit()

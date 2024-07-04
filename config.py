@@ -16,7 +16,7 @@ parser.add_argument('-a', '--attack', type=str, required=True, choices=['FGSM', 
                                                                         'shot_noise', 'impulse_noise', 'speckle_noise', 'gaussian_blur',
                                                                         'defocus_blur', 'zoom_blur', 'fog', 'frost', 'snow', 'spatter',
                                                                         'contrast', 'brightness', 'saturate', 'pixelate', 'elastic',
-                                                                        'glass_blur', 'motion_blur'], help='attack type')
+                                                                        'glass_blur', 'motion_blur','PGD'], help='attack type')
 
 # 进行参数解析
 args = parser.parse_args()
@@ -59,6 +59,7 @@ class Config:
     # FGSM中代表扰动参数
     # IFGSM中代表迭代轮数
     # MIFGSM中代表迭代轮数
+    # PGD中代表迭代轮数
     epsilons = [0, .05, .1, .15, .2, .25, .3]
 
     # 记录不同扰动下的结果
@@ -84,6 +85,9 @@ class Config:
     # BLIP所需的模型
     # 图像的输入尺寸
     blip_image_size = 480
+
+    # PGD中代表邻域
+    eps = 0.3
 
     # 显示参数
     def display(self):
@@ -111,6 +115,9 @@ class Config:
             print('------------MIFGSM Attack------------')
             print(f'alpha: {self.alpha}')
             print(f'momentum: {self.momentum}')
+        if self.attack == 'PGD':
+            print('------------PGD Attack------------')
+            print(f'eps:{self.eps}')
 
 
 if __name__ == '__main__':
