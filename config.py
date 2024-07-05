@@ -16,7 +16,7 @@ parser.add_argument('-a', '--attack', type=str, required=True, choices=['FGSM', 
                                                                         'shot_noise', 'impulse_noise', 'speckle_noise', 'gaussian_blur',
                                                                         'defocus_blur', 'zoom_blur', 'fog', 'frost', 'snow', 'spatter',
                                                                         'contrast', 'brightness', 'saturate', 'pixelate', 'elastic',
-                                                                        'glass_blur', 'motion_blur','PGD'], help='attack type')
+                                                                        'glass_blur', 'motion_blur', 'PGD', 'CW_classification'], help='attack type')
 
 # 进行参数解析
 args = parser.parse_args()
@@ -89,6 +89,13 @@ class Config:
 
     # PGD中代表邻域
     eps = 0.3
+
+    # CW的参数
+    # 超参数，用于平衡损失函数和L2距离
+    c = 1e-4
+    # 优化器的学习率
+    lr = 0.01
+
 
     # 显示参数
     def display(self):

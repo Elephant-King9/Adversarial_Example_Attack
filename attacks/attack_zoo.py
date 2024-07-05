@@ -157,6 +157,13 @@ def get_attack(model, val_DataLoader, config):
         logger.info('PGD attack loaded')
         logger.info(f'PGD iters: {config.epsilons}')
         return attack
+    elif config.attack == 'CW_classification' and config.model == 'MNIST':
+        from attacks.attack_CW_classification import attack_CW_classification
+        attack = attack_CW_classification(model, config)
+        config.epsilons = [0, 5, 10, 15, 20]
+        logger.info('CW classification attack loaded')
+        logger.info(f'CW iters: {config.epsilons}')
+        return attack
     else:
         logger.critical(f'Attack {config.attacker} not recognized')
         exit()
