@@ -164,6 +164,13 @@ def get_attack(model, val_DataLoader, config):
         logger.info('CW classification attack loaded')
         logger.info(f'CW iters: {config.epsilons}')
         return attack
+    elif config.attack == 'CW_caption' and config.model == 'coco':
+        from attacks.attack_CW_caption import attack_CW_caption
+        attack = attack_CW_caption(model, config)
+        config.epsilons = [0, 5, 10, 15, 20]
+        logger.info('CW Caption attack loaded')
+        logger.info(f'CW iters: {config.epsilons}')
+        return attack
     else:
         logger.critical(f'Attack {config.attacker} not recognized')
         exit()

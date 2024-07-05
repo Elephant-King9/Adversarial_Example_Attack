@@ -16,7 +16,8 @@ parser.add_argument('-a', '--attack', type=str, required=True, choices=['FGSM', 
                                                                         'shot_noise', 'impulse_noise', 'speckle_noise', 'gaussian_blur',
                                                                         'defocus_blur', 'zoom_blur', 'fog', 'frost', 'snow', 'spatter',
                                                                         'contrast', 'brightness', 'saturate', 'pixelate', 'elastic',
-                                                                        'glass_blur', 'motion_blur', 'PGD', 'CW_classification'], help='attack type')
+                                                                        'glass_blur', 'motion_blur', 'PGD', 'CW_classification',
+                                                                        'CW_caption'], help='attack type')
 
 # 进行参数解析
 args = parser.parse_args()
@@ -128,6 +129,10 @@ class Config:
             print(f'eps:{self.eps}')
         if self.attack == 'CW_classification':
             print('------------CW_classification Attack------------')
+            print(f'c:{self.c}')
+            print(f'lr: {self.lr}')
+        if self.attack == 'CW_caption':
+            print('------------CW_caption Attack------------')
             print(f'c:{self.c}')
             print(f'lr: {self.lr}')
 
