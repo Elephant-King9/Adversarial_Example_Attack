@@ -10,7 +10,7 @@ class attack_IFGSM:
         self.model = model
         self.config = config
 
-    def attack(self, image, epsilon, label):
+    def attack(self, image, epsilon, label, **kwargs):
         """
         Perform IFGSM attack
         :param image: 输入图片

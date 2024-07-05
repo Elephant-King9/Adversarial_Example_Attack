@@ -9,7 +9,7 @@ class attack_MIFGSM:
         self.config = config
         self.model = model
 
-    def attack(self, image, epsilon, label):
+    def attack(self, image, epsilon, label, **kwargs):
         # 反向归一化处理
         # perturbed_image = denorm(image, self.config.device)
         perturbed_image = image

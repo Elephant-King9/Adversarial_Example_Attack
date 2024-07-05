@@ -23,7 +23,7 @@ class attack_motion_blur:
         self.config = config
         self.model = model
 
-    def attack(self, image, epsilon, label):
+    def attack(self, image, epsilon, label, **kwargs):
         # 恢复到 [0, 255] 范围
         image = image * 255
         # 将tensor数据类型的图片转化为numpy

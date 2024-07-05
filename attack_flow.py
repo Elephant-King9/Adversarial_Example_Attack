@@ -42,8 +42,8 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
             3. 扰动效果不可控
             在 FGSM 攻击中，添加的扰动是在未归一化的数据上进行的。如果不进行归一化处理，这些扰动在模型输入阶段可能会被放大或缩小，影响攻击的效果。这样，攻击的成功率和对抗样本的生成效果可能会变得不可控。
             """
-            perturbed_data_normalized = transforms.Normalize((0.1307,), (0.3081,))(perturbed_data)
-            output = model.predict(perturbed_data_normalized)
+            # perturbed_data_normalized = transforms.Normalize((0.1307,), (0.3081,))(perturbed_data)
+            output = model.predict(perturbed_data)
             final_pred = output.argmax(dim=1, keepdim=True)
             if final_pred.item() == label.item():
                 accuracy += 1
@@ -97,7 +97,7 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
             # 这里传入的参数annotations好像是没啥用
             init_pred = model.predict(image_id, image, annotations, display=True)
             # 攻击后生成新的图像
-            perturbed_data = attacker.attack(image, eps, annotations)
+            perturbed_data = attacker.attack(image, eps, init_pred, image_id=image_id, annotations=annotations)
             # 将攻击后生成的图像重新进行标准化
             # perturbed_data = transforms.Normalize((0.48145466, 0.4578275, 0.40821073),
             #                                       (0.26862954, 0.26130258, 0.27577711))(perturbed_data)

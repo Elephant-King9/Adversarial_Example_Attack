@@ -10,15 +10,16 @@ class attack_CW_caption:
         self.c = config.c
         self.lr = config.lr
 
-    def attack(self, image, epsilon, label):
+    def attack(self, image, epsilon, label, **kwargs):
         """
         Perform CW attack
         :param image: 输入图片
         :param epsilon: 迭代轮数
-        :param label: 标签
+        :param label: 初试预测
         """
+        image_id = kwargs.get('image_id', None)
+        annotations = kwargs.get('annotations', None)
         image = image.clone().detach().to(self.config.device)
-        label = label.to(self.config.device)
         perturbed_image = image.clone().detach()
         perturbed_image.requires_grad = True
         optimizer = torch.optim.Adam([perturbed_image], lr=self.lr)
@@ -26,7 +27,7 @@ class attack_CW_caption:
         for _ in range(epsilon):
             optimizer.zero_grad()
 
-            real_caption = self.model.predict(perturbed_image)
+            real_caption = self.model.predict(image_id, perturbed_image, annotations, display=True)
             target_loss = self.compute_caption_loss(real_caption, label)
 
             l2_loss = torch.norm(perturbed_image - image)

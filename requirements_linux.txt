@@ -1,6 +1,7 @@
 Brotli @ file:///croot/brotli-split_1714483155106/work
 certifi @ file:///croot/certifi_1717618050233/work/certifi
 charset-normalizer @ file:///tmp/build/80754af9/charset-normalizer_1630003229654/work
+click==8.1.7
 contourpy==1.1.1
 cycler==0.12.1
 fairscale==0.4.13
@@ -24,6 +25,7 @@ mkl-random @ file:///croot/mkl_random_1695059800811/work
 mkl-service==2.4.0
 mpmath @ file:///croot/mpmath_1690848262763/work
 networkx @ file:///croot/networkx_1690561992265/work
+nltk==3.8.1
 numpy @ file:///work/mkl/numpy_and_numpy_base_1682953417311/work
 opencv-python==4.10.0.84
 packaging==24.1

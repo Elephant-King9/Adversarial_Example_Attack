@@ -8,7 +8,7 @@ class attack_shot_noise:
         self.config = config
         self.model = model
 
-    def attack(self, image, epsilon, label):
+    def attack(self, image, epsilon, label, **kwargs):
         # 将tensor数据类型的图片转化为numpy
         image = image.cpu().numpy()
         c = [60, 25, 12, 5, 3][epsilon - 1]

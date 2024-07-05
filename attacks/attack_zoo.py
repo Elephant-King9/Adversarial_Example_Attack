@@ -152,25 +152,25 @@ def get_attack(model, val_DataLoader, config):
         return attacker
     elif config.attack == 'PGD':
         from attacks.attack_PGD import attack_PGD
-        attack = attack_PGD(model, config)
+        attacker = attack_PGD(model, config)
         config.epsilons = [0, 5, 10, 15, 20]
         logger.info('PGD attack loaded')
         logger.info(f'PGD iters: {config.epsilons}')
-        return attack
+        return attacker
     elif config.attack == 'CW_classification' and config.model == 'MNIST':
         from attacks.attack_CW_classification import attack_CW_classification
-        attack = attack_CW_classification(model, config)
+        attacker = attack_CW_classification(model, config)
         config.epsilons = [0, 5, 10, 15, 20]
         logger.info('CW classification attack loaded')
         logger.info(f'CW iters: {config.epsilons}')
-        return attack
-    elif config.attack == 'CW_caption' and config.model == 'coco':
+        return attacker
+    elif config.attack == 'CW_caption' and config.model == 'blip_caption':
         from attacks.attack_CW_caption import attack_CW_caption
-        attack = attack_CW_caption(model, config)
+        attacker = attack_CW_caption(model, config)
         config.epsilons = [0, 5, 10, 15, 20]
         logger.info('CW Caption attack loaded')
         logger.info(f'CW iters: {config.epsilons}')
-        return attack
+        return attacker
     else:
-        logger.critical(f'Attack {config.attacker} not recognized')
+        logger.critical(f'Attack {config.attack} not recognized')
         exit()

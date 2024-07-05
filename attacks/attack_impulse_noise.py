@@ -9,7 +9,7 @@ class attack_impulse_noise:
         self.config = config
         self.model = model
 
-    def attack(self, image, epsilon, label):
+    def attack(self, image, epsilon, label, **kwargs):
         # 将tensor数据类型的图片转化为numpy
         image = image.cpu().numpy()
 

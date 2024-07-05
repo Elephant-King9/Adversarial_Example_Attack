@@ -11,7 +11,7 @@ class attack_FGSM:
         self.config = config
 
     # 用于生成对抗样本
-    def attack(self, image, epsilon, label):
+    def attack(self, image, epsilon, label, **kwargs):
         """
         Perform FGSM with
         :param image: 输入图片

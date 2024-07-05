@@ -13,7 +13,7 @@ class attack_PGD:
         # 代表扰动范围
         self.eps = config.eps
 
-    def attack(self, image, epsilon, label):
+    def attack(self, image, epsilon, label, **kwargs):
         """
         Perform PGD attack
         :param image: 输入图片

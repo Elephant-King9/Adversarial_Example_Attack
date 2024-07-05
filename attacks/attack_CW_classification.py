@@ -9,7 +9,7 @@ class attack_CW_classification:
         self.c = config.c
         self.lr = config.lr
 
-    def attack(self, image, epsilon, label):
+    def attack(self, image, epsilon, label, **kwargs):
         """
         Perform CW attack
         :param image: 输入图片

@@ -10,7 +10,7 @@ class attack_fog:
         self.config = config
         self.model = model
 
-    def attack(self, image, epsilon, label):
+    def attack(self, image, epsilon, label, **kwargs):
         # 将tensor数据类型的图片转化为numpy
         image = image.cpu().numpy()
         logger.debug(f'image shape before:{image.shape}')  # image shape:(1, 3, 480, 480)
