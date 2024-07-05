@@ -15,14 +15,12 @@ def save_image(config, adv_examples, eps):
         adv_ex = (adv_ex * 255).astype(np.uint8)
 
         # 调试信息，判断为什么输出的图片是黑的
-        logger.debug(f"Image {i} min value: {adv_ex.min()}, max value: {adv_ex.max()}")
+        # logger.debug(f"Image {i} min value: {adv_ex.min()}, max value: {adv_ex.max()}")
 
-        if adv_ex.shape[0] == 1:  # 单通道图像
-            adv_ex = adv_ex.squeeze(0)
-        elif adv_ex.shape[0] == 3:  # 三通道图像
+        logger.debug(f"adv_ex.shape:{adv_ex.shape}")        # MNIST : adv_ex.shape:(28, 28)
+
+        if adv_ex.shape[0] == 3:  # 三通道图像
             adv_ex = np.transpose(adv_ex, (1, 2, 0))
-        else:
-            raise ValueError(f"Unexpected shape for adv_ex: {adv_ex.shape}")
 
         # 确保图像数据在 [0, 1] 范围内（如果是浮点数类型）
         if adv_ex.dtype == np.float32 or adv_ex.dtype == np.float64:
