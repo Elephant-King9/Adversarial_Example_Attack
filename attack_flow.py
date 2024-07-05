@@ -74,6 +74,9 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
                 if len(adv_examples) < 5:
                     adv_ex = perturbed_data.squeeze().detach().cpu().numpy()
                     adv_examples.append((init_pred.item(), final_pred.item(), adv_ex))
+            # 调小用于测试
+            if len(adv_examples) >= 5:
+                break
 
         # 代表Coco数据集完成Image Caption任务
         elif len(data) == 4:
