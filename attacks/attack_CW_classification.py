@@ -27,7 +27,7 @@ class attack_CW_classification:
         for _ in range(epsilon):
             optimizer.zero_grad()
 
-            output = self.model(perturbed_image)
+            output = self.model.predict(perturbed_image)
             # 提取模型真实标签
             real = output.gather(1, label.unsqueeze(1)).squeeze(1)
             # 提取模型对除真实标签之外的类别的最高置信度

@@ -126,6 +126,10 @@ class Config:
         if self.attack == 'PGD':
             print('------------PGD Attack------------')
             print(f'eps:{self.eps}')
+        if self.attack == 'CW_classification':
+            print('------------CW_classification Attack------------')
+            print(f'c:{self.c}')
+            print(f'lr: {self.lr}')
 
 
 if __name__ == '__main__':
