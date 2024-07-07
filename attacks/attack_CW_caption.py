@@ -9,6 +9,7 @@ class attack_CW_caption:
         self.device = config.device
         self.c = config.c
         self.lr = config.lr
+        self.k = config.k
 
     def attack(self, image, epsilon, label, **kwargs):
         """
@@ -30,7 +31,7 @@ class attack_CW_caption:
             real_caption = self.model.predict(image_id, perturbed_image, annotations, display=True)
             target_loss = self.compute_caption_loss(real_caption, label)
 
-            l2_loss = torch.norm(perturbed_image - image)
+            l2_loss = torch.norm(perturbed_image - image, p=2)
             loss = self.c * target_loss + l2_loss
 
             loss.backward()

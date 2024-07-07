@@ -8,6 +8,7 @@ class attack_CW_classification:
         self.config = config
         self.c = config.c
         self.lr = config.lr
+        self.k = config.k
 
     def attack(self, image, epsilon, label, **kwargs):
         """
@@ -34,10 +35,10 @@ class attack_CW_classification:
             other = output.max(1)[0]
 
             # CW目标函数
-            # 相当于f6 , > 0 的时候说明还没有被预测错误，
-            f_loss = torch.clamp(real - other, min=0)
+            # 相当于f6, > 0 的时候说明还没有被预测错误，
+            f_loss = torch.clamp(real - other + self.k, min=0)
             # 计算L2损失
-            l2_loss = F.mse_loss(perturbed_image, image)
+            l2_loss = torch.norm(perturbed_image - image, p=2)
             # 总公式，目的是最小化这个值
             loss = self.c * f_loss + l2_loss
 

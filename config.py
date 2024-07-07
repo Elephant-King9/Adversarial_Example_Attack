@@ -96,6 +96,8 @@ class Config:
     c = 1e-4
     # 优化器的学习率
     lr = 0.01
+    # kappa,用于计算损失的临界点
+    k = 0
 
 
     # 显示参数
@@ -135,6 +137,7 @@ class Config:
             print('------------CW_caption Attack------------')
             print(f'c:{self.c}')
             print(f'lr: {self.lr}')
+            print(f'kappa:{self.k}')
 
 
 if __name__ == '__main__':
