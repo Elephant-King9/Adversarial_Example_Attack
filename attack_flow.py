@@ -13,7 +13,9 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
     accuracy = 0
     adv_examples = []
     start_time = time.time()
+    i = 0
     for data in val_DataLoader:
+        i = i + 1
         # 代表DataLoader的返回值只用img和label，也就是MNIST数据集
         # 主要的功能就是，选择原本预测对的图片，经过不同参数的攻击后，判断输出结果
         if len(data) == 2:
@@ -46,7 +48,7 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
             # perturbed_data_normalized = transforms.Normalize((0.1307,), (0.3081,))(perturbed_data)
             output = model.predict(perturbed_data)
             final_pred = output.argmax(dim=1, keepdim=True)
-            logger.debug(f'final_pred:{final_pred.item()}, label:{label.item()}, init_pred:{init_pred.item()}')
+            logger.debug(f'i:{i}, final_pred:{final_pred.item()}, label:{label.item()}, init_pred:{init_pred.item()}')
             if final_pred.item() == label.item():
                 accuracy += 1
                 if eps == 0 and len(adv_examples) < 5:

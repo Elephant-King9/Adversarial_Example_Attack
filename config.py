@@ -105,7 +105,7 @@ class Config:
     # 二分查找步数，用于更新const
     BINARY_SEARCH_STEPS = 9
     # 是否提前终止，True代表开启
-    ABORT_EARLY = 9
+    ABORT_EARLY = False
     # 初始的常数const
     INITIAL_CONST = 1e-3
     # 是否进行目标攻击

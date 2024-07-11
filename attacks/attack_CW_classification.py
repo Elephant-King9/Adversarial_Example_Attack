@@ -54,21 +54,21 @@ class attack_CW_classification:
                 real = torch.sum(label * outputs, dim=1)
                 other = torch.max((1 - label) * outputs - (label * 1e4), dim=1)[0]
 
-                logger.debug(f'Real: {real}, Other: {other}')
+                # logger.debug(f'Real: {real.item()}, Other: {other.item()}')
 
                 if self.targeted:
                     loss1_raw = other - real + self.confidence
                     loss1 = torch.clamp(loss1_raw, min=0)
-                    logger.debug(f'loss1_raw (targeted): {loss1_raw}, loss1 (clamped): {loss1}')
+                    # logger.debug(f'loss1_raw (targeted): {loss1_raw}, loss1 (clamped): {loss1}')
                 else:
                     loss1_raw = real - other + self.confidence
                     loss1 = torch.clamp(loss1_raw, min=0)
-                    logger.debug(f'loss1_raw (untargeted): {loss1_raw}, loss1 (clamped): {loss1}')
+                    # logger.debug(f'loss1_raw (untargeted): {loss1_raw}, loss1 (clamped): {loss1}')
 
                 l2_loss = torch.sum((perturbed_image - image) ** 2, dim=[1, 2, 3])
                 loss2 = l2_loss
                 loss = torch.sum(const * loss1 + loss2)
-                logger.debug(f'epslion:{epsilon}, loss1:{loss1.item()}, loss2:{loss2.item()}, Loss:{loss.item()}')
+                # logger.debug(f'epslion:{epsilon}, loss1:{loss1.item()}, loss2:{loss2.item()}, Loss:{loss.item()}')
 
                 loss.backward()
                 optimizer.step()
@@ -78,7 +78,7 @@ class attack_CW_classification:
                         break
                     prev_loss = loss
 
-                if loss < best_loss:
+                if loss < best_loss and loss1 == 0:
                     best_loss = loss
                     best_perturbed_image = perturbed_image.clone().detach()
 
@@ -96,7 +96,14 @@ class attack_CW_classification:
                         const[i] = (lower_bound[i] + upper_bound[i]) / 2
                     else:
                         const[i] *= 10
+        # Debugging final prediction
+        # final_outputs = self.model.predict(best_perturbed_image)
+        # final_pred = final_outputs.argmax(dim=1)
+        # logger.debug(f'Final prediction after binary search step {binary_search_step}: {final_pred}')
         return best_perturbed_image
 
     def to_one_hot(self, y, num_classes):
-        return torch.eye(num_classes)[y].to(y.device)
+        # 先将y移动到CPU，然后生成one-hot编码，最后移动到原始设备上
+        y_cpu = y.to('cpu')
+        one_hot = torch.eye(num_classes)[y_cpu].to(y.device)
+        return one_hot
