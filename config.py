@@ -109,7 +109,7 @@ class Config:
     # 初始的常数const
     INITIAL_CONST = 1e-3
     # 是否进行目标攻击
-    TARGETED = True
+    TARGETED = False
 
     # ALA参数
     # tau 用于控制对抗损失中的阈值。
