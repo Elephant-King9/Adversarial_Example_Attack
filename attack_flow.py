@@ -5,6 +5,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from torchvision import transforms
 
+from metrics.PSNR import PSNR
 from utils.save_image import save_image
 from log_config import logger
 
@@ -77,6 +78,14 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
             # 调小用于测试
             if len(adv_examples) >= 5:
                 break
+                # 图像评估
+            psnr = PSNR(image, perturbed_data)
+            psnr_value = psnr.calculate_psnr()
+            if psnr_value == float('inf'):
+                # 代表图像完全相同
+                logger.warning(f'{config.attack} attack lose efficacy')
+            else:
+                logger.info(f'psnr_value: {psnr_value} dB')
 
         # 代表Coco数据集完成Image Caption任务
         elif len(data) == 4:
@@ -125,6 +134,16 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
             # 用于测试，先把循环搞小点
             if len(adv_examples) >= 3:
                 break
+            # 图像评估
+            psnr = PSNR(image, perturbed_data)
+            psnr_value = psnr.calculate_psnr()
+            if psnr_value == float('inf'):
+                # 代表图像完全相同
+                logger.warning(f'{config.attack} attack lose efficacy')
+            else:
+                logger.info(f'psnr_value: {psnr_value} dB')
+
+
     save_image(config, adv_examples, eps)
 
     # 单独保存图片信息，只用MNIST数据集的时候才保存
