@@ -11,13 +11,17 @@ from contrast import main
 parser = argparse.ArgumentParser(description='select model dataset attack')
 
 parser.add_argument('-m', '--model', type=str, required=True, choices=['MNIST', 'blip_caption'], help='model type')
-parser.add_argument('-d', '--dataset', type=str, required=True, choices=['MNIST', 'coco'], help='dataset type')
+parser.add_argument('-d', '--dataset', type=str, required=True, choices=['MNIST', 'coco', 'CIFAR10'], help='dataset type')
 parser.add_argument('-a', '--attack', type=str, required=True, choices=['FGSM', 'IFGSM', 'MIFGSM', 'gaussian_noise',
-                                                                        'shot_noise', 'impulse_noise', 'speckle_noise', 'gaussian_blur',
-                                                                        'defocus_blur', 'zoom_blur', 'fog', 'frost', 'snow', 'spatter',
-                                                                        'contrast', 'brightness', 'saturate', 'pixelate', 'elastic',
-                                                                        'glass_blur', 'motion_blur', 'PGD', 'CW_classification',
-                                                                        'CW_caption'], help='attack type')
+                                                                        'shot_noise', 'impulse_noise', 'speckle_noise',
+                                                                        'gaussian_blur',
+                                                                        'defocus_blur', 'zoom_blur', 'fog', 'frost',
+                                                                        'snow', 'spatter',
+                                                                        'contrast', 'brightness', 'saturate',
+                                                                        'pixelate', 'elastic',
+                                                                        'glass_blur', 'motion_blur', 'PGD',
+                                                                        'CW_classification',
+                                                                        'CW_caption', 'ALA_classification'], help='attack type')
 
 # 进行参数解析
 args = parser.parse_args()
@@ -78,7 +82,7 @@ class Config:
     # MIFGSM所需的参数
     # PGD所需的参数
     # 迭代步长
-    alpha = 1/75
+    alpha = 1 / 75
 
     # MIFGSM所需的参数
     # 动量
@@ -99,6 +103,19 @@ class Config:
     # kappa,用于计算损失的临界点
     k = 0
 
+    # ALA参数
+    # tau 用于控制对抗损失中的阈值。
+    # 当计算对抗损失时，如果真实类别的得分减去其他类别的最高得分低于 tau，
+    # 则将其设置为 tau。这样可以防止损失过小，从而增强攻击效果。
+    tau = -0.2
+    # 𝛽
+    eta = 0.3
+    # [m,n]
+    init_range = [0, 1]
+    # 是否随机初始化
+    random_init = True
+    # T 分段数目
+    segment = 64
 
     # 显示参数
     def display(self):
@@ -138,6 +155,13 @@ class Config:
             print(f'c:{self.c}')
             print(f'lr: {self.lr}')
             print(f'kappa:{self.k}')
+        if self.attack == 'ALA':
+            print('------------ALA_classification Attack------------')
+            print(f'tau:{self.tau}')
+            print(f'eta:{self.eta}')
+            print(f'init_range:{self.init_range}')
+            print(f'random_init:{self.random_init}')
+            print(f'segment:{self.segment}')
 
 
 if __name__ == '__main__':
