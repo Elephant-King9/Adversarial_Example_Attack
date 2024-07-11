@@ -79,7 +79,7 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
             if len(adv_examples) >= 5:
                 break
                 # 图像评估
-            psnr = PSNR(image, perturbed_data)
+            psnr = PSNR(img, perturbed_data)
             psnr_value = psnr.calculate_psnr()
             if psnr_value == float('inf'):
                 # 代表图像完全相同
@@ -106,7 +106,12 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
             # 这里传入的参数annotations好像是没啥用
             init_pred = model.predict(image_id, image, annotations, display=True)
             # 攻击后生成新的图像
-            perturbed_data = attacker.attack(image, eps, init_pred, image_id=image_id, annotations=annotations)
+            # perturbed_data = attacker.attack(image, eps, init_pred, image_id=image_id, annotations=annotations)
+            # 这里第三个参数传入init_pred会报错
+            # logger.debug(f'ann:{annotations}')
+            # logger.debug(f'init_pred:{init_pred}')
+            perturbed_data = attacker.attack(image, eps, annotations, image_id=image_id, init_pred=init_pred)
+
             # 将攻击后生成的图像重新进行标准化
             # perturbed_data = transforms.Normalize((0.48145466, 0.4578275, 0.40821073),
             #                                       (0.26862954, 0.26130258, 0.27577711))(perturbed_data)

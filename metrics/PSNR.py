@@ -11,9 +11,9 @@ class PSNR(object):
     def calculate_psnr(self, **kwargs):
         # 如果输入是 PyTorch 张量，则将其转换为 NumPy 数组
         if isinstance(self.original, torch.Tensor):
-            self.original = self.original.cpu().numpy()
+            self.original = self.original.detach().cpu().numpy()
         if isinstance(self.compressed, torch.Tensor):
-            self.compressed = self.compressed.cpu().numpy()
+            self.compressed = self.compressed.detach().cpu().numpy()
 
         # 确保图像的范围是 [0, 1]
         self.original = np.clip(self.original, 0, 1)

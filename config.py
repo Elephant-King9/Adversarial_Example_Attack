@@ -31,7 +31,7 @@ class Config:
     # 训练设备
 
     # NVIDIA
-    train_gpu = '5'
+    train_gpu = '4'
     device = torch.device('cuda:' + train_gpu if torch.cuda.is_available() else 'cpu')
 
     # Mac M1
@@ -97,7 +97,7 @@ class Config:
 
     # CW的参数
     # 超参数，用于平衡损失函数和L2距离
-    c = 1e-4
+    c = 1e-3
     # 优化器的学习率
     lr = 0.01
     # kappa,用于计算损失的临界点

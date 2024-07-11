@@ -48,8 +48,10 @@ def save_image(config, adv_examples, eps):
         else:
             logger.critical(f'{config.dataset} is Unknown dataset')
             exit()
+        logger.debug(f'adv_dir:{adv_dir}')
+        logger.debug(f'len(os.listdir(adv_dir)):{len(os.listdir(adv_dir))}')
         # 如果图片保存的不够5张
-        if os.path.exists(len(os.listdir(adv_dir)) <= 5):
+        if len(os.listdir(adv_dir)) <= 5:
             img.save(adv_path)  # 保存图片到本地，文件名包含初始预测标签和最终预测标签
             logger.info(f"Adversarial example {i} saved")
         else:

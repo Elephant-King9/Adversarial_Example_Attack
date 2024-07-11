@@ -1,6 +1,6 @@
 import torch
 from nltk.translate.bleu_score import sentence_bleu
-
+from log_config import logger
 
 class attack_CW_caption:
     def __init__(self, model, config):
@@ -19,17 +19,19 @@ class attack_CW_caption:
         :param label: 初试预测
         """
         image_id = kwargs.get('image_id', None)
+        init_pred = kwargs.get('init_pred', None)
         annotations = kwargs.get('annotations', None)
+        
         image = image.clone().detach().to(self.config.device)
         perturbed_image = image.clone().detach()
         perturbed_image.requires_grad = True
         optimizer = torch.optim.Adam([perturbed_image], lr=self.lr)
 
-        for _ in range(epsilon):
+        for iteration in range(epsilon):
             optimizer.zero_grad()
 
             real_caption = self.model.predict(image_id, perturbed_image, annotations, display=True)
-            target_loss = self.compute_caption_loss(real_caption, label)
+            target_loss = self.compute_caption_loss(real_caption, init_pred)
 
             l2_loss = torch.norm(perturbed_image - image, p=2)
             loss = self.c * target_loss + l2_loss
@@ -40,9 +42,13 @@ class attack_CW_caption:
             with torch.no_grad():
                 perturbed_image.data = torch.clamp(perturbed_image, 0, 1)
 
+            # Log the loss and check the perturbation magnitude
+            logger.debug(f'Iteration {iteration+1}/{epsilon}, Loss: {loss.item()}, L2 loss: {l2_loss.item()}')
+            perturbation = torch.norm(perturbed_image - image).item()
+            logger.debug(f'Perturbation magnitude: {perturbation}')
+
         return perturbed_image
 
-    # 用BLEU计算caption的差距
     def compute_caption_loss(self, real_caption, target_caption):
         # 使用BLEU评分计算描述文本之间的损失
         reference = [target_caption.split()]

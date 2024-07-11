@@ -1,6 +1,6 @@
 import torch
 import torch.nn.functional as F
-
+from log_config import logger
 
 class attack_CW_classification:
     def __init__(self, model, config):
@@ -25,10 +25,10 @@ class attack_CW_classification:
 
         optimizer = torch.optim.Adam([perturbed_image], lr=self.lr)
 
-        for _ in range(epsilon):
+        for iteration in range(epsilon):
             optimizer.zero_grad()
 
-            output = self.model.prdict(perturbed_image)
+            output = self.model.predict(perturbed_image)
             # 提取模型真实标签
             real = output.gather(1, label.unsqueeze(1)).squeeze(1)
             # 提取模型对除真实标签之外的类别的最高置信度
@@ -44,7 +44,7 @@ class attack_CW_classification:
 
             loss.backward()
             optimizer.step()
-
+            logger.debug(f'Iteration {iteration+1}/{epsilon}, Loss: {loss.item()}, L2 loss: {l2_loss.item()}')
             # 将生成的对抗样本的扰动控制在0~1之间
             perturbed_image.data = torch.clamp(perturbed_image, 0, 1)
 
