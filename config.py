@@ -6,6 +6,7 @@ import torchvision
 from torchvision import transforms
 
 from contrast import main
+from networks.blip.blip import init_tokenizer
 
 # 创建ArgumentParser，用于命令行
 parser = argparse.ArgumentParser(description='select model dataset attack')
@@ -96,8 +97,6 @@ class Config:
     eps = 0.3
 
     # CW_classification的参数
-    # 超参数，用于平衡损失函数和L2距离
-    c = 1e-3
     # 优化器的学习率
     LEARNING_RATE = 1e-2
     # 置信度,kappa,用于计算损失的临界点，用于标签相关
@@ -106,10 +105,14 @@ class Config:
     BINARY_SEARCH_STEPS = 9
     # 是否提前终止，True代表开启
     ABORT_EARLY = False
-    # 初始的常数const
+    # 初始的常数const,平衡loss1和loss2
     INITIAL_CONST = 1e-3
     # 是否进行目标攻击
     TARGETED = False
+
+    # CW_caption的参数
+    # 分词器，使用blip.py中定义的分词器
+    tokenizer = init_tokenizer()
 
     # ALA参数
     # tau 用于控制对抗损失中的阈值。
@@ -156,6 +159,12 @@ class Config:
             print(f'eps:{self.eps}')
         if self.attack == 'CW_classification':
             print('------------CW_classification Attack------------')
+            print(f'LEARNING_RATE:{self.LEARNING_RATE}')
+            print(f'CONFIDENCE:{self.CONFIDENCE}')
+            print(f'BINARY_SEARCH_STEPS:{self.BINARY_SEARCH_STEPS}')
+            print(f'ABORT_EARLY:{self.ABORT_EARLY}')
+            print(f'INITIAL_CONST:{self.INITIAL_CONST}')
+            print(f'TARGETED:{self.TARGETED}')
         if self.attack == 'CW_caption':
             print('------------CW_caption Attack------------')
         if self.attack == 'ALA':

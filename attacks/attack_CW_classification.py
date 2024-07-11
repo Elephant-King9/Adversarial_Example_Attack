@@ -99,10 +99,6 @@ class attack_CW_classification:
                         const[i] = (lower_bound[i] + upper_bound[i]) / 2
                     else:
                         const[i] *= 10
-        # Debugging final prediction
-        # final_outputs = self.model.predict(best_perturbed_image)
-        # final_pred = final_outputs.argmax(dim=1)
-        # logger.debug(f'Final prediction after binary search step {binary_search_step}: {final_pred}')
         return best_perturbed_image
 
     def to_one_hot(self, y, num_classes):
