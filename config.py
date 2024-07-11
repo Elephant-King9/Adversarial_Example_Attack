@@ -95,13 +95,21 @@ class Config:
     # PGD中代表邻域
     eps = 0.3
 
-    # CW的参数
+    # CW_classification的参数
     # 超参数，用于平衡损失函数和L2距离
     c = 1e-3
     # 优化器的学习率
-    lr = 0.01
-    # kappa,用于计算损失的临界点
-    k = 0
+    LEARNING_RATE = 1e-2
+    # 置信度,kappa,用于计算损失的临界点，用于标签相关
+    CONFIDENCE = 0
+    # 二分查找步数，用于更新const
+    BINARY_SEARCH_STEPS = 9
+    # 是否提前终止，True代表开启
+    ABORT_EARLY = 9
+    # 初始的常数const
+    INITIAL_CONST = 1e-3
+    # 是否进行目标攻击
+    TARGETED = True
 
     # ALA参数
     # tau 用于控制对抗损失中的阈值。
