@@ -156,13 +156,8 @@ class Config:
             print(f'eps:{self.eps}')
         if self.attack == 'CW_classification':
             print('------------CW_classification Attack------------')
-            print(f'c:{self.c}')
-            print(f'lr: {self.lr}')
         if self.attack == 'CW_caption':
             print('------------CW_caption Attack------------')
-            print(f'c:{self.c}')
-            print(f'lr: {self.lr}')
-            print(f'kappa:{self.k}')
         if self.attack == 'ALA':
             print('------------ALA_classification Attack------------')
             print(f'tau:{self.tau}')

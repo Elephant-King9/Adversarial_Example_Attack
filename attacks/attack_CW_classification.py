@@ -1,59 +1,3 @@
-# import torch
-# import torch.nn.functional as F
-# from log_config import logger
-#
-# class attack_CW_classification:
-#     def __init__(self, model, config):
-#         self.model = model
-#         self.config = config
-#         self.c = config.c
-#         self.lr = config.lr
-#         self.k = config.k
-#
-#     def attack(self, image, epsilon, label, **kwargs):
-#         """
-#         Perform CW attack
-#         :param image: 输入图片
-#         :param epsilon: 迭代轮数
-#         :param label: 标签
-#         """
-#         # 初始化变量
-#         image = image.clone().detach().to(self.config.device)
-#         label = label.to(self.config.device)
-#         perturbed_image = image.clone().detach()
-#         perturbed_image.requires_grad = True
-#
-#         optimizer = torch.optim.Adam([perturbed_image], lr=self.lr)
-#
-#         for iteration in range(epsilon):
-#             optimizer.zero_grad()
-#
-#             output = self.model.predict(perturbed_image)
-#             # 提取模型真实标签
-#             real = output.gather(1, label.unsqueeze(1)).squeeze(1)
-#             # 提取模型对除真实标签之外的类别的最高置信度
-#             other = output.max(1)[0]
-#
-#             # CW目标函数
-#             # 相当于f6, > 0 的时候说明还没有被预测错误，
-#             f_loss = torch.clamp(real - other + self.k, min=0)
-#             # 计算L2损失
-#             l2_loss = torch.norm(perturbed_image - image, p=2)
-#             # 总公式，目的是最小化这个值
-#             loss = self.c * f_loss + l2_loss
-#
-#             loss.backward()
-#             optimizer.step()
-#             logger.debug(f'Iteration {iteration+1}/{epsilon}, Loss: {loss.item()}, L2 loss: {l2_loss.item()}')
-#             # 将生成的对抗样本的扰动控制在0~1之间
-#             perturbed_image.data = torch.clamp(perturbed_image, 0, 1)
-#
-#         return perturbed_image
-#
-#
-#
-
-
 import torch
 import torch.optim as optim
 import numpy as np
@@ -73,7 +17,7 @@ class attack_CW_classification:
         self.initial_const = config.INITIAL_CONST  # 初始常数c
         self.targeted = config.TARGETED  # 是否进行目标攻击
 
-    def attack(self, image, label, epsilon, **kwargs):
+    def attack(self, image, epsilon, label, **kwargs):
         """
         Perform CW attack on classification
         :param image: 输入图片
@@ -101,11 +45,15 @@ class attack_CW_classification:
             optimizer = optim.Adam([perturbed_image], lr=self.learning_rate)
             prev_loss = float('inf')
 
+            # 初始化 loss1 和 loss2
+            loss1 = torch.zeros(self.batch_size).to(self.device)
+            loss2 = torch.zeros(self.batch_size).to(self.device)
+
             for iteration in range(epsilon):
                 optimizer.zero_grad()
 
                 # 计算对抗样本的预测输出
-                outputs = self.model(perturbed_image)
+                outputs = self.model.predict(perturbed_image)
 
                 # 计算损失函数
                 # label 是目标标签的one-hot编码（在目标攻击中）。
@@ -125,6 +73,8 @@ class attack_CW_classification:
                 l2_loss = torch.sum((perturbed_image - image) ** 2, dim=[1, 2, 3])
                 loss2 = l2_loss
                 loss = torch.sum(const * loss1 + loss2)
+                # logger.debug(f'epslion:{epsilon}, loss1:{loss1.item()}, loss2:{loss2.item()}, Loss:{loss.item()}')
+
 
                 # 反向传播和优化
                 loss.backward()
@@ -163,5 +113,4 @@ class attack_CW_classification:
                         const[i] = (lower_bound[i] + upper_bound[i]) / 2
                     else:
                         const[i] *= 10
-        logger.debug(f'loss1:{loss1.item()}, loss2:{loss2.item()}, Loss:{loss.item()}')
         return best_perturbed_image

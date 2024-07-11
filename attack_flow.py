@@ -46,6 +46,7 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
             # perturbed_data_normalized = transforms.Normalize((0.1307,), (0.3081,))(perturbed_data)
             output = model.predict(perturbed_data)
             final_pred = output.argmax(dim=1, keepdim=True)
+            logger.debug(f'final_pred:{final_pred.item()}, label:{label.item()}, init_pred:{init_pred.item()}')
             if final_pred.item() == label.item():
                 accuracy += 1
                 if eps == 0 and len(adv_examples) < 5:
@@ -78,14 +79,14 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
             # 调小用于测试
             if len(adv_examples) >= 5:
                 break
-                # 图像评估
+            # 图像评估
             psnr = PSNR(img, perturbed_data)
             psnr_value = psnr.calculate_psnr()
             if psnr_value == float('inf'):
                 # 代表图像完全相同
-                logger.warning(f'{config.attack} attack lose efficacy')
+                logger.warning(f'eps:{eps}, {config.attack} attack lose efficacy')
             else:
-                logger.info(f'psnr_value: {psnr_value} dB')
+                logger.info(f'eps:{eps}, len(adv_examples):{len(adv_examples)}, psnr_value: {psnr_value} dB')
 
         # 代表Coco数据集完成Image Caption任务
         elif len(data) == 4:
@@ -144,9 +145,9 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
             psnr_value = psnr.calculate_psnr()
             if psnr_value == float('inf'):
                 # 代表图像完全相同
-                logger.warning(f'{config.attack} attack lose efficacy')
+                logger.warning(f'eps:{eps}, {config.attack} attack lose efficacy')
             else:
-                logger.info(f'psnr_value: {psnr_value} dB')
+                logger.info(f'eps:{eps}, psnr_value: {psnr_value} dB')
 
 
     save_image(config, adv_examples, eps)
