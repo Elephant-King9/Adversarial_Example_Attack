@@ -160,7 +160,7 @@ def get_attack(model, val_DataLoader, config):
     elif config.attack == 'CW_classification' and config.model == 'MNIST':
         from attacks.attack_CW_classification import attack_CW_classification
         attacker = attack_CW_classification(model, config)
-        config.epsilons = [0, 100, 500]
+        config.epsilons = [0, 10, 500]
         logger.info('CW classification attack loaded')
         logger.info(f'CW iters: {config.epsilons}')
         return attacker

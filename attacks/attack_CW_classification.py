@@ -2,7 +2,7 @@ import torch
 import torch.optim as optim
 import numpy as np
 from log_config import logger
-
+from utils.check_encoding_type import *
 class attack_CW_classification:
     def __init__(self, model, config):
         self.model = model
@@ -27,7 +27,7 @@ class attack_CW_classification:
         image = image.clone().detach().to(self.device)
         perturbed_image = image.clone().detach().requires_grad_(True)
         # batch_size = image.size(0)
-
+        logger.debug(f'label:{check_encoding_type(label)}')
         # 初始化变量
         best_perturbed_image = image.clone()
         best_loss = float('inf')
@@ -55,6 +55,7 @@ class attack_CW_classification:
                 # 计算对抗样本的预测输出
                 outputs = self.model.predict(perturbed_image)
 
+                # logger.debug(f'Outputs: {outputs}')
                 # 计算损失函数
                 # label 是目标标签的one-hot编码（在目标攻击中）。
                 # label * outputs 会提取 outputs 中与目标标签对应的部分。
@@ -62,6 +63,8 @@ class attack_CW_classification:
                 real = torch.sum(label * outputs, dim=1)
                 # other用于获得除真实标签以外的最大logit值
                 other = torch.max((1 - label) * outputs - (label * 1e4), dim=1)[0]
+                
+                # logger.debug(f'Real: {real}, Other: {other}')
 
                 if self.targeted:
                     # 目标攻击的目的是使模型的预测结果变为特定的目标类别，即希望模型将输入图像分类为攻击者指定的目标类别。
@@ -73,11 +76,12 @@ class attack_CW_classification:
                 l2_loss = torch.sum((perturbed_image - image) ** 2, dim=[1, 2, 3])
                 loss2 = l2_loss
                 loss = torch.sum(const * loss1 + loss2)
-                # logger.debug(f'epslion:{epsilon}, loss1:{loss1.item()}, loss2:{loss2.item()}, Loss:{loss.item()}')
+                logger.debug(f'epslion:{epsilon}, loss1:{loss1.item()}, loss2:{loss2.item()}, Loss:{loss.item()}')
 
 
                 # 反向传播和优化
                 loss.backward()
+
                 optimizer.step()
 
                 # 提前终止
