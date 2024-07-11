@@ -40,6 +40,7 @@ class attack_CW_classification:
         upper_bound = torch.ones(self.batch_size).to(self.device) * 1e10
 
         for binary_search_step in range(self.binary_search_steps):
+            logger.debug(f'const:{const.item()}')
             optimizer = optim.Adam([perturbed_image], lr=self.learning_rate)
             prev_loss = float('inf')
 
@@ -67,6 +68,7 @@ class attack_CW_classification:
 
                 l2_loss = torch.sum((perturbed_image - image) ** 2, dim=[1, 2, 3])
                 loss2 = l2_loss
+                logger.debug(f'l2_loss: {l2_loss.item()}')
                 loss = torch.sum(const * loss1 + loss2)
                 # logger.debug(f'epslion:{epsilon}, loss1:{loss1.item()}, loss2:{loss2.item()}, Loss:{loss.item()}')
 
@@ -81,6 +83,7 @@ class attack_CW_classification:
                 if loss < best_loss and loss1 == 0:
                     best_loss = loss
                     best_perturbed_image = perturbed_image.clone().detach()
+                    logger.debug(f'Best loss:{best_loss}')
 
                 with torch.no_grad():
                     perturbed_image.data = torch.clamp(perturbed_image, 0, 1)
