@@ -106,9 +106,13 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
                 data[2][0],
                 data[3:],
             )
+            logger.info(f'image shape:{image.shape}')
             # 生成原图的预测结果
             # 这里传入的参数annotations好像是没啥用
             init_pred = model.predict(image_id, image, annotations, display=True)
+            # init_pred_1 = model.predict(image_id, image, annotations, display=True)
+            # logger.info(f'init_pred:{init_pred}')
+            # logger.info(f'init_pred_1:{init_pred_1}')
 
             perturbed_data = attacker.attack(image, eps, annotations, image_id=image_id, init_pred=init_pred)
 

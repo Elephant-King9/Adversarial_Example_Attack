@@ -49,13 +49,13 @@ sympy @ file:///croot/sympy_1701397643339/work
 threadpoolctl==3.5.0
 tifffile==2023.7.10
 timm==1.0.7
-tokenizers==0.19.1
+tokenizers==0.13.3
 torch==2.3.1
 torchaudio==2.3.1
 torchtext==0.18.0
 torchvision==0.18.1
 tqdm==4.66.4
-transformers==4.41.2
+transformers==4.26.1
 triton==2.3.1
 typing_extensions @ file:///croot/typing_extensions_1715268824938/work
 tzdata==2024.1
