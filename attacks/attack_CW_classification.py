@@ -26,7 +26,7 @@ class attack_CW_classification:
         :param label: 标签（目标标签或原标签）
         :param epsilon: 迭代次数
         """
-
+        # logger.info('----------------------------begin----------------------------')
         image = image.clone().detach().to(self.device)
         perturbed_image = image.clone().detach().requires_grad_(True)
         label = self.to_one_hot(label, self.num_classes)
@@ -70,7 +70,7 @@ class attack_CW_classification:
                 loss2 = l2_loss
                 logger.debug(f'l2_loss: {l2_loss.item()}')
                 loss = torch.sum(const * loss1 + loss2)
-                # logger.debug(f'epslion:{epsilon}, loss1:{loss1.item()}, loss2:{loss2.item()}, Loss:{loss.item()}')
+                logger.debug(f'epslion:{epsilon}, loss1:{loss1.item()}, loss2:{loss2.item()}, Loss:{loss.item()}')
 
                 loss.backward()
                 optimizer.step()

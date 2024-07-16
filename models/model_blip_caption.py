@@ -121,9 +121,8 @@ class model_blip_caption(model_base):
         [0]:在调用 generate 方法后，通常会返回一个包含多个结果的列表，每个结果对应一个生成的序列。
         通过 [0] 索引，这行代码获取这些生成序列中的第一个，通常也是评分最高（即模型认为最可能的）描述。
         """
-        pred_caption = self.model.generate(image, sample=True, num_beams=3, max_length=20, min_length=5)[0]
+        pred_caption = self.model.generate(image, sample=False, num_beams=3, max_length=20, min_length=5)[0]
         # display用于判断是否在控制台输出
         if display:
-            # print('image_id: %s, pred_caption: %s' % (image_id, pred_caption))
             logger.info('image_id: %s, pred_caption: %s' % (image_id, pred_caption))
         return pred_caption

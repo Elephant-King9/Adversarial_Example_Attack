@@ -10,6 +10,7 @@ from rouge import Rouge
 nltk.download('punkt')
 nltk.download('wordnet')
 
+
 class attack_CW_caption:
     def __init__(self, model, config):
         self.model = model
@@ -32,6 +33,7 @@ class attack_CW_caption:
         :param epsilon: 迭代次数
         """
 
+        logger.info('----------------------------begin----------------------------')
         image = image.clone().detach().to(self.device)
         perturbed_image = image.clone().detach().requires_grad_(True)
 
@@ -72,12 +74,13 @@ class attack_CW_caption:
                     # loss1_ROUGE = -self._caption_loss_ROUGE(generated_caption, original_caption)
                     loss1_METEOR = -self._caption_loss_METEOR(generated_caption, original_caption)
 
-
                 l2_loss = torch.sum((perturbed_image - image) ** 2, dim=[1, 2, 3])
                 loss2 = l2_loss
                 # logger.debug(f'l2_loss: {l2_loss.item()}')
                 loss = torch.sum(const * loss1_METEOR + loss2)
-                logger.debug(f'epslion:{epsilon}, loss1:{loss1_METEOR.item()}, loss2:{loss2.item()}, Loss:{loss.item()}')
+                logger.debug(
+                    f'epslion:{epsilon}, loss1:{loss1_METEOR.item()}, loss2:{loss2.item()}, Loss:{loss.item()}')
+
 
                 loss.backward()
                 optimizer.step()
@@ -129,8 +132,8 @@ class attack_CW_caption:
         """
         Compute the loss between generated caption and reference caption using METEOR score
         """
-        # logger.debug(f'generated_caption: {generated_caption}')
-        # logger.debug(f'reference_caption: {reference_caption}')
+        logger.debug(f'generated_caption: {generated_caption}')
+        logger.debug(f'reference_caption: {reference_caption}')
 
         # 对生成的句子和参考句子进行分词
         generated_tokens = nltk.word_tokenize(generated_caption)
@@ -143,7 +146,7 @@ class attack_CW_caption:
         # 损失计算：METEOR 分数越高，损失越低
         loss = 1.0 - meteor
         return torch.tensor(loss, dtype=torch.float32).to(self.device)
-    
+
     # ROUGE
     def _caption_loss_ROUGE(self, generated_caption, reference_caption):
         """
@@ -151,7 +154,7 @@ class attack_CW_caption:
         """
         # logger.debug(f'generated_caption: {generated_caption}')
         # logger.debug(f'reference_caption: {reference_caption}')
-        
+
         # 初始化 ROUGE 评估器
         rouge = Rouge()
 

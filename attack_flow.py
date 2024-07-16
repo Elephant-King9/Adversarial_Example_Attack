@@ -9,6 +9,7 @@ from metrics.PSNR import PSNR
 from utils.save_image import save_image
 from log_config import logger
 
+
 def attack_flow(eps, attacker, model, val_DataLoader, config):
     accuracy = 0
     adv_examples = []
@@ -108,11 +109,7 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
             # 生成原图的预测结果
             # 这里传入的参数annotations好像是没啥用
             init_pred = model.predict(image_id, image, annotations, display=True)
-            # 攻击后生成新的图像
-            # perturbed_data = attacker.attack(image, eps, init_pred, image_id=image_id, annotations=annotations)
-            # 这里第三个参数传入init_pred会报错
-            # logger.debug(f'ann:{annotations}')
-            # logger.debug(f'init_pred:{init_pred}')
+
             perturbed_data = attacker.attack(image, eps, annotations, image_id=image_id, init_pred=init_pred)
 
             # 将攻击后生成的图像重新进行标准化
@@ -150,7 +147,6 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
                 logger.warning(f'eps:{eps}, {config.attack} attack lose efficacy')
             else:
                 logger.info(f'eps:{eps}, psnr_value: {psnr_value} dB')
-
 
     save_image(config, adv_examples, eps)
 
