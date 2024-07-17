@@ -45,6 +45,8 @@ def save_image(config, adv_examples, eps):
             adv_path = os.path.join(adv_dir, f"{init_pred}->{final_pred}.png")
         elif config.dataset == 'coco':
             adv_path = os.path.join(adv_dir, f"{i}.png")
+        elif config.dataset == 'CIFAR10':
+            adv_path = os.path.join(adv_dir, f"{init_pred}->{final_pred}.png")
         else:
             logger.critical(f'{config.dataset} is Unknown dataset')
             exit()

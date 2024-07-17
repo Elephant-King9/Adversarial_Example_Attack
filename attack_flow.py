@@ -27,13 +27,13 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
             output = model.predict(img)
 
             init_pred = output.argmax(dim=1, keepdim=True)
+            # logger.debug(f'i:{i}, label:{label.item()}, init_pred:{init_pred.item()}')
             # 如果已经预测错误了，就不用进行后续操作了，进行下一轮循环
             # 因为要主要判断原本正确的样本，经过对抗样本攻击后受到的影响
             if init_pred.item() != label.item():
                 continue
-
             perturbed_data = attacker.attack(img, eps, label)
-
+            # logger.debug('after attack')
             """
             重新进行归一化处理
             如果不对生成的对抗样本进行归一化处理，程序可能会受到以下几个方面的影响：

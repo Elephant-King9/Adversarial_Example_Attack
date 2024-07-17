@@ -1,18 +1,16 @@
 # 创建自定义的神经网络
 import torch
-from torch import nn
 
 from models import model_base
-import torchvision.models
-from torchvision.models import ResNet50_Weights
+from networks.CIFAR10 import CIFAR10
 
 
-class model_ResNet50:
-    def __init__(self, config=None, pretrained_model_path=''):
+class model_CIFAR10:
+    def __init__(self, config, pretrained_model_path):
         self.config = config
-        self.model = torchvision.models.resnet50(weights=ResNet50_Weights.DEFAULT)
-        self.model.add_module('add_linear', nn.Linear(1000, 10))
+        self.model = CIFAR10()
         self.model = self.model.to(self.config.device)
+        self.model.load_state_dict(torch.load(pretrained_model_path))
         self.model.eval()
 
     # 计算损失
@@ -38,9 +36,4 @@ class model_ResNet50:
         return data_grad
 
     def predict(self, image):
-        return self.model(image)
-
-
-if __name__ == '__main__':
-    model = model_ResNet50()
-    print(model.model)
+        return self.model.forward(image)
