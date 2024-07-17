@@ -28,7 +28,7 @@ def get_dataset(config):
         return val_dataset
     elif config.dataset == 'CIFAR10':
         # 判断数据集是否存在
-        if os.path.isdir(os.path.join(dataset_path, 'cifar-10-batches-py')):
+        if os.path.isdir(os.path.join(dataset_path, 'cifar-10')):
             # train_dataset = torchvision.datasets.MNIST(dataset_MNIST_path, train=True, download=config.download,
             #                                            transform=config.transform)
             val_dataset = torchvision.datasets.MNIST(dataset_path, train=False, download=config.download,

@@ -127,6 +127,8 @@ class Config:
     random_init = True
     # T 分段数目
     segment = 64
+    # 学习率
+    lr = 0.5
 
     # 显示参数
     def display(self):

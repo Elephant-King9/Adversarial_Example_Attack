@@ -1,10 +1,12 @@
 import os.path
 
 import torch
+from torch import nn
+
 from log_config import logger
 from utils.judge_device import judge_device
-
-
+import torchvision.models
+from torchvision.models import ResNet50_Weights
 # 预训练模型的路径
 
 
@@ -37,7 +39,11 @@ def get_model(config):
         model = model_blip_caption(config)
         logger.info('blip_caption model loaded')
         return model
-
+    elif config.model == 'ResNet50' and config.dataset == 'CIFAR10':
+        model = torchvision.models.resnet50(weights=ResNet50_Weights.DEFAUL)
+        model.add_module('add_linear', nn.Linear(1000, 10))
+        logger.info('ResNet50 model loaded')
+        return model
     else:
         logger.critical('Model not recognized')
         exit()
