@@ -31,8 +31,8 @@ def get_dataset(config):
         if os.path.isdir(os.path.join(dataset_path, 'cifar-10')):
             # train_dataset = torchvision.datasets.MNIST(dataset_MNIST_path, train=True, download=config.download,
             #                                            transform=config.transform)
-            val_dataset = torchvision.datasets.MNIST(dataset_path, train=False, download=config.download,
-                                                     transform=config.transform)
+            val_dataset = torchvision.datasets.CIFAR10(dataset_path, train=False, download=config.download,
+                                                       transform=config.transform)
             logger.info('CIFAR10 dataset loaded')
             return val_dataset
         else:
@@ -44,6 +44,3 @@ def get_dataset(config):
         exit()
 
     return
-
-
-

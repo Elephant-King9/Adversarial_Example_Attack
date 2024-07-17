@@ -22,6 +22,7 @@ def attack_flow(eps, attacker, model, val_DataLoader, config):
         if len(data) == 2:
             img, label = data
             img, label = img.to(config.device), label.to(config.device)
+            # logger.info(f'data size = 2,img shape:{img.shape}')
             img.requires_grad = True
             output = model.predict(img)
 

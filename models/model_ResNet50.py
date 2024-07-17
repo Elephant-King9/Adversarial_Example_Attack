@@ -7,7 +7,7 @@ import torchvision.models
 from torchvision.models import ResNet50_Weights
 
 class model_ResNet50:
-    def __init__(self, config, pretrained_model_path):
+    def __init__(self, config, pretrained_model_path=''):
         self.config = config
         self.model = torchvision.models.resnet50(weights=ResNet50_Weights.DEFAULT)
         self.model = self.model.to(self.config.device)
