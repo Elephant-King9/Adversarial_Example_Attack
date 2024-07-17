@@ -11,7 +11,7 @@ from networks.blip.blip import init_tokenizer
 # 创建ArgumentParser，用于命令行
 parser = argparse.ArgumentParser(description='select model dataset attack')
 
-parser.add_argument('-m', '--model', type=str, required=True, choices=['MNIST', 'blip_caption'], help='model type')
+parser.add_argument('-m', '--model', type=str, required=True, choices=['MNIST', 'blip_caption','ResNet50'], help='model type')
 parser.add_argument('-d', '--dataset', type=str, required=True, choices=['MNIST', 'coco', 'CIFAR10'], help='dataset type')
 parser.add_argument('-a', '--attack', type=str, required=True, choices=['FGSM', 'IFGSM', 'MIFGSM', 'gaussian_noise',
                                                                         'shot_noise', 'impulse_noise', 'speckle_noise',
@@ -32,7 +32,7 @@ class Config:
     # 训练设备
 
     # NVIDIA
-    train_gpu = '5'
+    train_gpu = '4'
     device = torch.device('cuda:' + train_gpu if torch.cuda.is_available() else 'cpu')
 
     # Mac M1

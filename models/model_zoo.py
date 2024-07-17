@@ -40,7 +40,7 @@ def get_model(config):
         logger.info('blip_caption model loaded')
         return model
     elif config.model == 'ResNet50' and config.dataset == 'CIFAR10':
-        model = torchvision.models.resnet50(weights=ResNet50_Weights.DEFAUL)
+        model = torchvision.models.resnet50(weights=ResNet50_Weights.DEFAULT)
         model.add_module('add_linear', nn.Linear(1000, 10))
         logger.info('ResNet50 model loaded')
         return model
