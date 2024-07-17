@@ -6,7 +6,8 @@ import torchvision
 from torch import nn
 from torch.utils.data import DataLoader
 
-from models.model_MNIST import model_MNIST
+from networks.MNIST import MNIST
+
 from utils.judge_device import judge_device
 from utils.mkdir import mkdir
 from log_config import logger

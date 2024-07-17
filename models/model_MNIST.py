@@ -7,11 +7,12 @@ from networks.MNIST import MNIST
 
 
 class model_MNIST:
-    def __init__(self, config, pretrained_model_path):
+    def __init__(self, config, pretrained_model_path=''):
         self.config = config
         self.model = MNIST()
         self.model = self.model.to(self.config.device)
-        self.model.load_state_dict(torch.load(pretrained_model_path))
+        if pretrained_model_path != '':
+            self.model.load_state_dict(torch.load(pretrained_model_path))
         self.model.eval()
 
     # 计算损失

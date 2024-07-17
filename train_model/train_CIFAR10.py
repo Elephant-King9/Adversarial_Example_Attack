@@ -10,6 +10,7 @@ from models.model_CIFAR10 import model_CIFAR10
 from utils.judge_device import judge_device
 from utils.mkdir import mkdir
 from log_config import logger
+from networks.CIFAR10 import CIFAR10
 
 
 class train_CIFAR10:
@@ -23,7 +24,7 @@ class train_CIFAR10:
         # 创建DataLoader
         train_dataLoader = DataLoader(dataset=train_dataset, batch_size=64)
         # 创建自定义的神经网络
-        model = model_CIFAR10().to(self.config.device)
+        model = CIFAR10().to(self.config.device)
 
         # 加载损失函数与梯度下降算法
         loss_fn = nn.CrossEntropyLoss().to(self.config.device)

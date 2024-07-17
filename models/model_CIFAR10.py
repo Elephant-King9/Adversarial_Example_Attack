@@ -6,11 +6,12 @@ from networks.CIFAR10 import CIFAR10
 
 
 class model_CIFAR10:
-    def __init__(self, config, pretrained_model_path):
+    def __init__(self, config, pretrained_model_path=''):
         self.config = config
         self.model = CIFAR10()
         self.model = self.model.to(self.config.device)
-        self.model.load_state_dict(torch.load(pretrained_model_path))
+        if pretrained_model_path != '':
+            self.model.load_state_dict(torch.load(pretrained_model_path))
         self.model.eval()
 
     # 计算损失
