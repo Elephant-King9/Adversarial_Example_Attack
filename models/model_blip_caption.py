@@ -43,11 +43,11 @@ class model_blip_caption(model_base):
         med_config: med模型的配置文件目录
             这里我设置为了我自己保存的路径
         """
-        model = blip_decoder(pretrained=self.pretrained_model_path, 
-                             image_size=self.config.blip_image_size, 
+        model = blip_decoder(pretrained=self.pretrained_model_path,
+                             image_size=self.config.blip_image_size,
                              vit='base',
-                             vit_grad_ckpt=False, 
-                             vit_ckpt_layer=0, 
+                             vit_grad_ckpt=False,
+                             vit_ckpt_layer=0,
                              prompt='a picture of ',
                              med_config=med_model_path)
         model = model.to(self.device)
@@ -68,6 +68,11 @@ class model_blip_caption(model_base):
             # print('target_model.py get_data_loader task_name:%s data_name: %s not support' % (
             #     self.config.task_name, self.config.data_name))
             exit()
+
+    # 用于计算CW在caption任务中的损失
+    def calc_one_sample_loss(self, image_id, image, caption):
+        loss = self.model(image, caption)
+        return loss
 
     # 计算损失
     def calc_loss(self, clean_image, annotations):

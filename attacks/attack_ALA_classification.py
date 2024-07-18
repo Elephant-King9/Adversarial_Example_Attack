@@ -7,6 +7,7 @@ from tqdm import tqdm
 from attacks.ALA_lib import RGB2Lab_t, Lab2RGB_t, light_filter, Normalize, update_paras
 from log_config import logger
 
+
 class attack_ALA_classification:
     def __init__(self, model, config):
         self.model = model
@@ -67,7 +68,6 @@ class attack_ALA_classification:
             Paras_light = torch.ones(self.batch_size, 1, self.segment).to(self.device)
         Paras_light.requires_grad = True
 
-
         # 迭代进行对抗攻击
         for _ in range(epsilon):
             # 修改光度值
@@ -105,6 +105,13 @@ class attack_ALA_classification:
             loss = adv_loss + factor * paras_loss
             loss.backward(retain_graph=True)
 
+            """
+            adv_loss: 对抗损失 目标是使对抗样本的预测结果偏离真实标签，也就类似于CW中两个标签的差值
+            paras_loss: 参数损失 也就是正则化项
+            loss: 总损失
+            """
+
+
             # 更新参数
             update_paras(Paras_light, self.lr, self.batch_size)
 
@@ -115,23 +122,9 @@ class attack_ALA_classification:
             # 布尔值，判断是否被错误分类
             # True代表错误分类
             is_adv = (predicted_classes != label)
-
-            # 保存对抗样本
-            # if is_adv.any():
-            #     # 判断是否有错误分类的
-            #     best_adversary[is_adv] = x_result[is_adv]
-            #     x_np = transforms.ToPILImage()(best_adversary[0].detach().cpu())
-            #     x_np.save(os.path.join(self.config.output_path + "success" + '/',
-            #                            image_id_list[k * self.config.batch_size][:-4] + '.png'))
         if epsilon != 0:
-            # logger.debug(f'x_result before:{x_result.shape}')
-            # x_result = x_result.permute(2, 0, 1)
-            # x_result = x_result.unsqueeze(0)
-            # logger.debug(f'x_result: {x_result.shape}')
             return x_result
         else:
             perturbed_image = perturbed_image.permute(2, 0, 1)
             perturbed_image = perturbed_image.unsqueeze(0)
-            # logger.debug(f'x_result: {perturbed_image.shape}')
             return perturbed_image
-

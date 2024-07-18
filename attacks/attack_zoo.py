@@ -178,6 +178,13 @@ def get_attack(model, val_DataLoader, config):
         logger.info('ALA classification attack loaded')
         logger.info(f'ALA iters: {config.epsilons}')
         return attacker
+    elif config.attack == 'ALA_caption':
+        from attacks.attack_ALA_caption import attack_ALA_caption
+        attacker = attack_ALA_caption(model, config)
+        config.epsilons = [0, 5, 10, 15, 20]
+        logger.info('ALA caption attack loaded')
+        logger.info(f'ALA iters: {config.epsilons}')
+        return attacker
 
     else:
         logger.critical(f'Attack {config.attack} not recognized')
