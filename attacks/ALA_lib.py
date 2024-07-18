@@ -2,6 +2,7 @@ import torch.nn as nn
 import numpy as np
 import torch
 from config import Config
+from log_config import logger
 
 config = Config()
 
@@ -55,16 +56,12 @@ def anti_f_t(im_tensor):
 
 
 def __rgb2xyz__t(rgb_tensor):
-    # rgb_tensor = rgb_tensor.permute(0, 2, 1)
-    # 修改后
-    rgb_tensor = rgb_tensor.permute(0, 2, 3, 1)
-
+    rgb_tensor = rgb_tensor.permute(0, 2, 1)
     XYZ = torch.matmul(M_t, rgb_tensor)
 
-
-    XYZ = XYZ.permute(1, 0, 2)
+    XYZ = XYZ.permute(1,0,2)
     XYZ = XYZ / 255.0
-    a, b, c = torch.split(XYZ, [1, 1, 1])
+    a,b,c = torch.split(XYZ, [1,1,1])
     a = a / 0.95047
     b = b / 1.0
     c = c / 1.08883
@@ -86,6 +83,7 @@ def __xyz2lab__t(xyz_tensor):
 
 
 def RGB2Lab_t(rgb_tensor):
+    logger.debug(f'RGB2Lab_t image shape:{rgb_tensor.shape}')
     xyz_tensor = __rgb2xyz__t(rgb_tensor)
     Lab = __xyz2lab__t(xyz_tensor)
     return Lab

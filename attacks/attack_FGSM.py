@@ -3,7 +3,7 @@ import time
 import torch
 from torchvision import transforms
 from utils.denorm import denorm
-
+from loguru import logger
 
 class attack_FGSM:
     def __init__(self, model, config):
@@ -29,4 +29,5 @@ class attack_FGSM:
         perturbed_image = perturbed_image + epsilon * sign_data_grad
         # 将生成的对抗样本的扰动控制在0~1之间
         perturbed_image = torch.clamp(perturbed_image, 0, 1)
+        logger.debug(f'perturbed_image: {perturbed_image.shape}')
         return perturbed_image

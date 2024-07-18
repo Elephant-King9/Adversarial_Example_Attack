@@ -171,7 +171,7 @@ def get_attack(model, val_DataLoader, config):
         logger.info('CW Caption attack loaded')
         logger.info(f'CW iters: {config.epsilons}')
         return attacker
-    elif config.attack == 'ALA_classification' and config.model == 'MNIST':
+    elif config.attack == 'ALA_classification':
         from attacks.attack_ALA_classification import attack_ALA_classification
         attacker = attack_ALA_classification(model, config)
         config.epsilons = [0, 5, 10, 15, 20]

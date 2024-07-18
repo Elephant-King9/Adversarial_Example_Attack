@@ -5,7 +5,7 @@ import os
 from torchvision import models, transforms
 from tqdm import tqdm
 from attacks.ALA_lib import RGB2Lab_t, Lab2RGB_t, light_filter, Normalize, update_paras
-
+from log_config import logger
 
 class attack_ALA_classification:
     def __init__(self, model, config):
@@ -21,8 +21,13 @@ class attack_ALA_classification:
         self.lr = config.lr
 
     def attack(self, image, epsilon, label, **kwargs):
+        # logger.debug(f'before attack image shape: {image.shape}')
 
+        # 从[1, 3, 32. 32] tensor -> [32, 32, 3] tensor
         perturbed_image = image.clone().detach().to(self.device)
+        perturbed_image = perturbed_image.squeeze(0)
+        perturbed_image = perturbed_image.permute(1, 2, 0)
+        # logger.debug(f'before attack  perturbed_image shape: {perturbed_image.shape}, type:{type(perturbed_image)}')
         # 将输出图像从[0,1]转化为[0,255]
         perturbed_image = perturbed_image * 255
 
@@ -32,7 +37,7 @@ class attack_ALA_classification:
         X_ori = X_ori.unsqueeze(0).type(torch.FloatTensor).to(self.device)
         best_adversary = perturbed_image.clone().to(self.device)
         # 将张量转换为 PIL 图像，方便后续的可视化或保存操作
-        mid_image = transforms.ToPILImage()(perturbed_image.squeeze(0).cpu())
+        # mid_image = transforms.ToPILImage()(perturbed_image.squeeze(0).cpu())
 
         # 分离L通道（光度）和a、b通道（颜色）
         # light：形状为 [batch_size, 1, H, W]，包含光度L通道。
@@ -62,6 +67,7 @@ class attack_ALA_classification:
             Paras_light = torch.ones(self.batch_size, 1, self.segment).to(self.device)
         Paras_light.requires_grad = True
 
+
         # 迭代进行对抗攻击
         for _ in range(epsilon):
             # 修改光度值
@@ -83,11 +89,12 @@ class attack_ALA_classification:
             # 也就是公式中的Lc&w
             # 删除归一化
             # logits = self.model(self.norm(X_adv))
-            logits = self.model(X_adv)
+            logits = self.model.predict(X_adv)
             # 获取真实类别的得分
             real = logits.gather(1, label.unsqueeze(1)).squeeze(1)
+            # logger.debug(f'logits shape: {logits.shape}, real shape: {real.shape}')
             # 除真实类别外的最高得分
-            other = (logits - torch.zeros_like(real).scatter_(1, label.unsqueeze(1), float('inf'))).max(1)[0]
+            other = (logits - torch.zeros_like(logits).scatter_(1, label.unsqueeze(1), float('inf'))).max(1)[0]
             adv_loss = torch.clamp(real - other, min=self.tau).sum()
 
             # 光度分布约束损失
@@ -104,7 +111,7 @@ class attack_ALA_classification:
             # 预测对抗样本的分类
             x_result = X_adv.detach().clone()
             # 获取样本分类
-            predicted_classes = self.model(x_result).argmax(1)
+            predicted_classes = self.model.predict(x_result).argmax(1)
             # 布尔值，判断是否被错误分类
             # True代表错误分类
             is_adv = (predicted_classes != label)
@@ -116,5 +123,15 @@ class attack_ALA_classification:
             #     x_np = transforms.ToPILImage()(best_adversary[0].detach().cpu())
             #     x_np.save(os.path.join(self.config.output_path + "success" + '/',
             #                            image_id_list[k * self.config.batch_size][:-4] + '.png'))
+        if epsilon != 0:
+            # logger.debug(f'x_result before:{x_result.shape}')
+            # x_result = x_result.permute(2, 0, 1)
+            # x_result = x_result.unsqueeze(0)
+            # logger.debug(f'x_result: {x_result.shape}')
+            return x_result
+        else:
+            perturbed_image = perturbed_image.permute(2, 0, 1)
+            perturbed_image = perturbed_image.unsqueeze(0)
+            # logger.debug(f'x_result: {perturbed_image.shape}')
+            return perturbed_image
 
-        return x_result
