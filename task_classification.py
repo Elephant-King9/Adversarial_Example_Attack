@@ -15,16 +15,16 @@ def task_classification(eps, attacker, model, val_DataLoader, config):
     i = 0
     for data in val_DataLoader:
         i = i + 1
-        img, label = data
-        img, label = img.to(config.device), label.to(config.device)
-        img.requires_grad = True
-        output = model.predict(img)
+        image, label = data
+        image, label = image.to(config.device), label.to(config.device)
+        image.requires_grad = True
+        output = model.predict(image)
 
         init_pred = output.argmax(dim=1, keepdim=True)
 
         if init_pred.item() != label.item():
             continue
-        perturbed_data = attacker.attack(img, eps, label)
+        perturbed_data = attacker.attack(image, eps, label)
         output = model.predict(perturbed_data)
         final_pred = output.argmax(dim=1, keepdim=True)
         logger.debug(f'i:{i}, final_pred:{final_pred.item()}, label:{label.item()}, init_pred:{init_pred.item()}')
@@ -34,18 +34,22 @@ def task_classification(eps, attacker, model, val_DataLoader, config):
             accuracy += 1
             if eps == 0 and len(adv_examples) < 5:
                 adv_ex = perturbed_data.squeeze().detach().cpu().numpy()
-                adv_examples.append((init_pred.item(), final_pred.item(), adv_ex))
+                # 原图
+                orig_ex = image.squeeze().detach().cpu().numpy()
+                adv_examples.append((init_pred.item(), final_pred.item(), orig_ex, adv_ex))
         else:
             if len(adv_examples) < 5:
                 adv_ex = perturbed_data.squeeze().detach().cpu().numpy()
-                adv_examples.append((init_pred.item(), final_pred.item(), adv_ex))
+                # 原图
+                orig_ex = image.squeeze().detach().cpu().numpy()
+                adv_examples.append((init_pred.item(), final_pred.item(), orig_ex, adv_ex))
 
         # 调小用于测试
         if len(adv_examples) >= 5:
             break
 
         # 图像评估
-        psnr = PSNR(img, perturbed_data)
+        psnr = PSNR(image, perturbed_data)
         psnr_value = psnr.calculate_psnr()
         if psnr_value == float('inf'):
             # 代表图像完全相同
