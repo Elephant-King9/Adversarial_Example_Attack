@@ -78,6 +78,7 @@ class Config:
     plt_path = 'results/plt_pics'
     # adv_pics图像保存路劲
     adv_path = 'results/adv_pics'
+    compare_path = 'results/compare_pics'
     # 预训练文件保存路径
     pre_train_path = 'assets/Pre-training_files'
     # IFGSM所需的参数

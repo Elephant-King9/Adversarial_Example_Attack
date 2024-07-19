@@ -4,7 +4,8 @@ import time
 import torch
 from torch.utils.data import DataLoader
 
-from attack_flow import attack_flow
+from task_classification import task_classification
+from task_caption import task_caption
 from attacks.attack_zoo import get_attack
 from datasets.dataset_zoo import get_dataset
 from models.model_zoo import get_model
@@ -28,21 +29,22 @@ def main(config):
     # 用于记录训练轮数
     i = 0
     for eps in config.epsilons:
-        # 测试不同的扰动对于准确性的判断
-        data = attack_flow(eps, attacker, model, val_dataLoader, config)
+        if config.dataset == "CIFAR10" or config.dataset == "MNIST":
+            # 代表分类任务
+            data = task_classification(eps, attacker, model, val_dataLoader, config)
+        elif config.dataset == "coco":
+            # 代表Image Caption任务
+            data = task_caption(eps, attacker, model, val_dataLoader, config)
+
         if len(data) == 2:
-            # 代表是MNIST数据集，返回数据集的预测准确率和保存的用例
+            # 分类任务
             acc, ex = data
-            # 将此扰动的准确度记录
             config.accuracies.append(acc)
         else:
-            # 代表coco数据集，仅返回保存的用例
+            # caption任务
             ex = data
-        # 二维数组，行代表不同的epsilon，列代表当前epsilon生成的对抗样本
         config.examples.append(ex)
         logger.info(f"Finish {i + 1} around attacking,{len(config.epsilons) - i - 1} rounds left.")
         i = i + 1
-        # 绘图
-    get_picture(config)
     sum_end_time = time.time()
     logger.info(f"sum time is {sum_end_time - sum_start_time}")

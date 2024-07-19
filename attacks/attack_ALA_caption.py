@@ -109,29 +109,3 @@ class attack_ALA_caption:
         mean_para_loss /= num
         mean_loss /= num
         return mean_adv_loss, mean_para_loss, mean_loss
-
-    # def forward_and_update_paras_vqa(self, image_id, image, annotations, Paras_light, segment, eta):
-    #     question_ids, questions, answers = annotations
-    #     if image.ndim == 5:
-    #         image = image.squeeze(0)
-    #
-    #     num, mean_adv_loss, mean_para_loss, mean_loss = 0, 0, 0, 0
-    #     for question, answer in zip(questions, answers):
-    #         for a in answer:
-    #             num += 1
-    #             self.model.model.zero_grad()
-    #             adv_loss = self.model.calc_one_sample_loss(image_id, image, question[0], a[0])
-    #             paras_loss = 1 - torch.abs(Paras_light).sum() / segment
-    #             loss = -adv_loss + eta * paras_loss
-    #             loss.backward(retain_graph=True)
-    #             update_paras(Paras_light, self.lr, self.batch_size)
-    #             mean_adv_loss += adv_loss.detach()
-    #             mean_para_loss += paras_loss.detach()
-    #             mean_loss += loss.detach()
-    #     mean_adv_loss /= num
-    #     mean_para_loss /= num
-    #     mean_loss /= num
-    #     return mean_adv_loss, mean_para_loss, mean_loss
-
-    # def close_writer(self):
-    #     self.writer.close()
