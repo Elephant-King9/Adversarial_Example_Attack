@@ -10,7 +10,7 @@ from matplotlib import pyplot as plt
 
 # 保存对抗样本生成的图片
 def save_image(config, adv_examples, eps):
-    for i, (init_pred, final_pred, adv_ex) in enumerate(adv_examples):
+    for i, (init_pred, final_pred, orig_ex, adv_ex) in enumerate(adv_examples):
         # 将图像归一化到0-255范围并转换为uint8类型
         adv_ex = (adv_ex * 255).astype(np.uint8)
 

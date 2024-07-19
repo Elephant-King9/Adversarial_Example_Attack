@@ -32,7 +32,7 @@ def save_image_comparison(config, adv_examples, eps):
         if adv_img.ndim == 3 and adv_img.shape[0] == 3:
             adv_img = np.transpose(adv_img, (1, 2, 0))
 
-        # 保存原始和对抗图像
+        # 创建对比图像
         fig, axes = plt.subplots(1, 2, figsize=(12, 6))
         axes[0].imshow(orig_img, cmap='gray')
         axes[0].set_title(f'Original (Pred: {init_pred})')
@@ -42,8 +42,11 @@ def save_image_comparison(config, adv_examples, eps):
         axes[1].set_title(f'Adversarial (Pred: {final_pred})')
         axes[1].axis('off')
 
+        # 调整子图之间的间距
+        plt.tight_layout(pad=2.0)
+
         # 保存对比图像
         compare_img_path = os.path.join(adv_dir, f"{i}_comparison.png")
-        plt.savefig(compare_img_path, bbox_inches='tight')
+        plt.savefig(compare_img_path, bbox_inches='tight', pad_inches=0.2)
         plt.close()
         logger.info(f"Comparison image {i} saved to {compare_img_path}")

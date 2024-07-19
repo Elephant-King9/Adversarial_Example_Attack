@@ -9,7 +9,6 @@ from task_caption import task_caption
 from attacks.attack_zoo import get_attack
 from datasets.dataset_zoo import get_dataset
 from models.model_zoo import get_model
-from pictures.picture_zoo import get_picture
 from log_config import logger
 
 
