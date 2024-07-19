@@ -185,7 +185,20 @@ def get_attack(model, val_DataLoader, config):
         logger.info('ALA caption attack loaded')
         logger.info(f'ALA iters: {config.epsilons}')
         return attacker
-
+    elif config.attack == 'PreC_AL':
+        from attacks.attack_Prec_al import PerC_AL
+        attacker = PerC_AL(model, config)
+        config.epsilons = [0, 5, 10, 15, 20]
+        logger.info('PerC_AL attack loaded')
+        logger.info(f'PreC_AL iters: {config.epsilons}')
+        return attacker
+    elif config.attack == 'PreC_CW':
+        from attacks.attack_Prec_cw import PerC_CW
+        attacker = PerC_CW(model, config)
+        config.epsilons = [0, 5, 10, 15, 20]
+        logger.info('PreC_CW attack loaded')
+        logger.info(f'PreC_CW iters: {config.epsilons}')
+        return attacker
     else:
         logger.critical(f'Attack {config.attack} not recognized')
         exit()

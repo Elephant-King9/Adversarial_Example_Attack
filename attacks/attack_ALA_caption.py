@@ -61,7 +61,7 @@ class attack_ALA_caption:
             adv_loss, paras_loss, loss = self.calc_loss(image_id, X_adv, annotations,
                                                         Paras_light, segment, eta)
 
-            logger.debug(f'adv_loss: {adv_loss}')
+            logger.debug(f'adv_loss: {adv_loss}, paras_loss: {paras_loss}, loss: {loss}')
             # if self.write_log:
             #     self.writer.add_scalar(f'adv_loss_{self.plot_pic_idx}', adv_loss, itr)
             #     self.writer.add_scalar(f'para_loss_{self.plot_pic_idx}', paras_loss, itr)
