@@ -33,7 +33,7 @@ class Config:
     # 训练设备
 
     # NVIDIA
-    train_gpu = '4'
+    train_gpu = '3'
     device = torch.device('cuda:' + train_gpu if torch.cuda.is_available() else 'cpu')
 
     # Mac M1

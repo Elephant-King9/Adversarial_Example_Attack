@@ -1,6 +1,5 @@
 import torch
 from .ALA_lib import RGB2Lab_t, Lab2RGB_t, light_filter, update_paras
-from torch.utils.tensorboard import SummaryWriter
 from log_config import logger
 
 
@@ -36,6 +35,7 @@ class attack_ALA_caption:
         perturbed_image = image.clone().detach().to(self.device)
         perturbed_image = perturbed_image.squeeze(0)
         perturbed_image = perturbed_image.permute(1, 2, 0)
+        perturbed_image = perturbed_image * 255
         X_ori = (RGB2Lab_t(perturbed_image / 1.0) + 128) / 255.0
         X_ori = X_ori.unsqueeze(0).type(torch.FloatTensor).to(self.device)
 
@@ -61,7 +61,7 @@ class attack_ALA_caption:
             adv_loss, paras_loss, loss = self.calc_loss(image_id, X_adv, annotations,
                                                         Paras_light, segment, eta)
 
-            logger.debug(f'adv_loss: {adv_loss}, paras_loss: {paras_loss}, loss: {loss}')
+            # logger.debug(f'adv_loss: {adv_loss}, paras_loss: {paras_loss}, loss: {loss}')
             # if self.write_log:
             #     self.writer.add_scalar(f'adv_loss_{self.plot_pic_idx}', adv_loss, itr)
             #     self.writer.add_scalar(f'para_loss_{self.plot_pic_idx}', paras_loss, itr)
