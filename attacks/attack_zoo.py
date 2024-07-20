@@ -199,9 +199,9 @@ def get_attack(model, val_DataLoader, config):
         logger.info('PreC_CW attack loaded')
         logger.info(f'PreC_CW iters: {config.epsilons}')
         return attacker
-    elif config.attack == 'Semantic_Adv_classification':
-        from attacks.attack_Semantic_Adv_classification import attack_Semantic_Adv_classification
-        attack = attack_Semantic_Adv_classification(model, config)
+    elif config.attack == 'Semantic_Adv':
+        from attacks.attack_Semantic_Adv import attack_Semantic_Adv
+        attack = attack_Semantic_Adv(model, config)
         config.epsilons = [0, 5, 10, 15, 20]
         logger.info('Semantic_Adv_classification attack loaded')
         logger.info(f'Semantic_Adv_classification iters: {config.epsilons}')

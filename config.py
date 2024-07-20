@@ -23,7 +23,7 @@ parser.add_argument('-a', '--attack', type=str, required=True, choices=['FGSM', 
                                                                         'glass_blur', 'motion_blur', 'PGD',
                                                                         'CW_classification',
                                                                         'CW_caption', 'ALA_classification', 'ALA_caption',
-                                                                        'PreC_AL', 'PreC_CW', 'Semantic_Adv_classification'], help='attack type')
+                                                                        'PreC_AL', 'PreC_CW', 'Semantic_Adv'], help='attack type')
 
 # 进行参数解析
 args = parser.parse_args()

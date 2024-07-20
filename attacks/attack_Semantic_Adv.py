@@ -1,10 +1,11 @@
+import matplotlib
 import numpy as np
 import torch
-import matplotlib
+
 from log_config import logger
 
 
-class attack_Semantic_Adv_classification:
+class attack_Semantic_Adv:
     def __init__(self, model, config):
         self.model = model
         self.device = config.device
