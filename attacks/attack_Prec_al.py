@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.autograd as autograd
 from math import pi, cos
-from attacks.differential_color_functions import rgb2lab_diff, ciede2000_diff
+from attacks.PreC_lib import rgb2lab_diff, ciede2000_diff
 
 
 def quantization(x):

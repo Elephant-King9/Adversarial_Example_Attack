@@ -2,7 +2,7 @@ from typing import Tuple, Optional
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from attacks.differential_color_functions import rgb2lab_diff, ciede2000_diff
+from attacks.PreC_lib import rgb2lab_diff, ciede2000_diff
 from loguru import logger
 
 def quantization(x):

@@ -1,4 +1,3 @@
-# 用于测试FGSM方法根据不同扰动对准确率的影响
 import time
 
 from metrics.PSNR import PSNR
@@ -32,20 +31,20 @@ def task_classification(eps, attacker, model, val_DataLoader, config):
         # 保存图像
         if final_pred.item() == label.item():
             accuracy += 1
-            if eps == 0 and len(adv_examples) < 5:
+            if eps == 0 and len(adv_examples) < 3:
                 adv_ex = perturbed_data.squeeze().detach().cpu().numpy()
                 # 原图
                 orig_ex = image.squeeze().detach().cpu().numpy()
                 adv_examples.append((init_pred.item(), final_pred.item(), orig_ex, adv_ex))
         else:
-            if len(adv_examples) < 5:
+            if len(adv_examples) < 3:
                 adv_ex = perturbed_data.squeeze().detach().cpu().numpy()
                 # 原图
                 orig_ex = image.squeeze().detach().cpu().numpy()
                 adv_examples.append((init_pred.item(), final_pred.item(), orig_ex, adv_ex))
 
         # 调小用于测试
-        if len(adv_examples) >= 5:
+        if len(adv_examples) >= 3:
             break
 
         # 图像评估

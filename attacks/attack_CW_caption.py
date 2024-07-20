@@ -26,13 +26,7 @@ class attack_CW_caption:
         self.tokenizer = config.tokenizer  # 分词器
 
     def attack(self, image, epsilon, target_caption=None, **kwargs):
-        """
-        Perform CW attack on image captioning
-        :param image: 输入图片
-        :param target_caption: 目标字幕（如果是目标攻击）
-        :param epsilon: 迭代次数
-        """
-
+        image_id = kwargs.get('image_id')
         logger.info('----------------------------begin----------------------------')
         image = image.clone().detach().to(self.device)
         perturbed_image = image.clone().detach().requires_grad_(True)
@@ -168,9 +162,3 @@ class attack_CW_caption:
         # 损失计算：ROUGE 分数越高，损失越低
         loss = 1.0 - rouge_l_f
         return torch.tensor(loss, dtype=torch.float32).to(self.device)
-# 用法示例（假设config已经定义）
-# from transformers import BertTokenizer
-# tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-# model = model_blip_caption(config)  # 你的图像字幕模型
-# attack = attack_CW_captioning(model, config, tokenizer)
-# perturbed_image = attack.attack(image, epsilon=1000, target_caption="a dog is running")

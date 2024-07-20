@@ -1,7 +1,3 @@
-# 用于测试FGSM方法根据不同扰动对准确率的影响
-import time
-
-
 from metrics.PSNR import PSNR
 from utils.plot_adv_comparison import save_image_comparison
 from utils.save_image import save_image
@@ -45,14 +41,14 @@ def task_caption(eps, attacker, model, val_DataLoader, config):
         else:
             logger.info(f'eps:{eps}, psnr_value: {psnr_value} dB')
 
-        if (eps == 0 or (eps != 0 and psnr_value != 0)) and len(adv_examples) < 5:
+        if (eps == 0 or (eps != 0 and psnr_value != 0)) and len(adv_examples) < 3:
             # 攻击后的图像
             adv_ex = perturbed_data.squeeze().detach().cpu().numpy()
             # 原图
             orig_ex = image.squeeze().detach().cpu().numpy()
             adv_examples.append((init_pred, final_pred, orig_ex, adv_ex))
         # 用于测试，先把循环搞小点
-        elif len(adv_examples) >= 5:
+        elif len(adv_examples) >= 3:
             break
 
     # 将图像存储到本地
