@@ -5,7 +5,6 @@ from torchvision import transforms
 from utils.denorm import denorm
 from loguru import logger
 
-
 class attack_FGSM:
     def __init__(self, model, config):
         self.model = model

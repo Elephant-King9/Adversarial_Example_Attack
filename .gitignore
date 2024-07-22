@@ -169,4 +169,6 @@ cython_debug/
 /assets/Pre-training_files/BLIP/*
 # BERT预训练模型
 /assets/Pre-training_files/BERT/*
+# BigAdv预训练模型
+/assets/Pre-training_files/Big_Adv/*.pth
 
