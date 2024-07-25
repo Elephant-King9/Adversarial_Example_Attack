@@ -132,6 +132,9 @@ class Config:
     # 学习率
     lr = 0.5
 
+
+
+
     # 显示参数
     def display(self):
         print('------------Train Device------------')

@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import torch.autograd as autograd
 from math import pi, cos
 from attacks.PreC_lib import rgb2lab_diff, ciede2000_diff
-
+from log_config import logger
 
 def quantization(x):
     """Quantize the continuous image tensors into 255 levels (8-bit encoding)."""
@@ -67,9 +67,10 @@ class PerC_AL:
             # Cosine annealing for alpha_l_init and alpha_c_init
             alpha_c = alpha_c_min + 0.5 * (self.alpha_c_init - alpha_c_min) * (1 + cos(i / self.max_iterations * pi))
             alpha_l = alpha_l_min + 0.5 * (self.alpha_l_init - alpha_l_min) * (1 + cos(i / self.max_iterations * pi))
-
+            logger.debug(f'alpha_c: {alpha_c}, alpha_l: {alpha_l}')
             loss = multiplier * nn.CrossEntropyLoss(reduction='sum')(self.model.predict((inputs + delta - 0.5) / 0.5),
                                                                      labels)
+            logger.debug(f'loss: {loss}')
             loss.backward()
             grad_a = delta.grad.clone()
             delta.grad.zero_()
@@ -82,6 +83,7 @@ class PerC_AL:
             d_map = ciede2000_diff(inputs_LAB, rgb2lab_diff(inputs + delta, self.device), self.device).unsqueeze(1)
             color_dis = torch.norm(d_map.view(batch_size, -1), dim=1)
             color_loss = color_dis.sum()
+            logger.debug(f'color_loss: {color_loss}')
             color_loss.backward()
             grad_color = delta.grad.clone()
             delta.grad.zero_()
