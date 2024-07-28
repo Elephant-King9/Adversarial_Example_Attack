@@ -34,10 +34,20 @@ def normalize(im):
     return im
 
 
+# 将一张 RGB 图像转换为 LAB 颜色空间，并使用聚类算法选择用于颜色化的提示
 def get_colorization_data(im, opt, model, classifier):
-    '''
-    Convert image to LAB, and choose hints given clusters
-    '''
+    """
+
+    :param im: tensor图像
+    :param opt:arg获取的参数，主要包括
+        n_clusters: 聚类的簇数（整数）。
+        k: 选择的簇数（整数）。
+        hint: 提示点的数量（整数）。
+        idx2label: 类别索引到标签的映射（字典或列表）。
+    :param model:用于颜色化的模型
+    :param classifier: 图像分类器
+    :return:
+    """
     data = {}
     data_lab = rgb2lab(im)
     data['L'] = data_lab[:, [0, ], :, :]
@@ -47,8 +57,9 @@ def get_colorization_data(im, opt, model, classifier):
 
     with torch.no_grad():
         # Get original classification
-        target = classifier(normalize(im)).argmax(1)
-        print(f'Original class: {target.item()}, {opt.idx2label[target]}')
+        # target = classifier(normalize(im)).argmax(1)
+        target = classifier.predict(normalize(im)).argmax(1)
+        # print(f'Original class: {target.item()}, {opt.idx2label[target]}')
 
         N, C, H, W = hints.shape
         # Convert hints to numpy for clustering
@@ -93,9 +104,11 @@ def get_colorization_data(im, opt, model, classifier):
 
 def forward(model, classifier, opt, data):
     out_class, out_reg = model(data['L'], data['hints'].clamp(-1, 1), data['mask'].clamp(-.5, .5))
-    print(f'out_class: {type(out_class)}, out_reg: {type(out_reg)}')
+    # print(f'out_class: {type(out_class)}, out_reg: {type(out_reg)}')
     out_rgb = lab2rgb(torch.cat((data['L'], out_reg), dim=1), opt).clamp(0, 1)
-    y_pred = classifier(normalize(out_rgb))
+    # y_pred = classifier(normalize(out_rgb))
+    y_pred = classifier.predict(normalize(out_rgb))
+
     return out_rgb, y_pred
 
 

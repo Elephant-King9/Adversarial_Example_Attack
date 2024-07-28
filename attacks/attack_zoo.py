@@ -201,11 +201,18 @@ def get_attack(model, val_DataLoader, config):
         return attacker
     elif config.attack == 'Semantic_Adv':
         from attacks.attack_Semantic_Adv import attack_Semantic_Adv
-        attack = attack_Semantic_Adv(model, config)
+        attacker = attack_Semantic_Adv(model, config)
         config.epsilons = [0, 5, 10, 15, 20]
-        logger.info('Semantic_Adv_classification attack loaded')
-        logger.info(f'Semantic_Adv_classification iters: {config.epsilons}')
-        return attack
+        logger.info('Semantic_Adv attack loaded')
+        logger.info(f'Semantic_Adv iters: {config.epsilons}')
+        return attacker
+    elif config.attack == 'Big_Adv_cadv':
+        from attacks.attack_Big_Adv_cadv import attack_Big_Adv_cadv
+        attacker = attack_Big_Adv_cadv(model, config)
+        config.epsilons = [0, 5, 10, 15, 20]
+        logger.info('Big_Adv_cadv attack loaded')
+        logger.info(f'Big_Adv_cadv iters: {config.epsilons}')
+        return attacker
     else:
         logger.critical(f'Attack {config.attack} not recognized')
         exit()
