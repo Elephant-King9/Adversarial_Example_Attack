@@ -85,3 +85,11 @@ python config.py -m MNIST -d MNIST -a FGSM
   + ALA(亮度攻击)
     + 分类任务(attack_ALA_classification)
 ![img.png](README_imgs/ALA_classification_1.png)
+  + Big_adv中的cadv
+    + 使用着色模型对图像进行重新着色后攻击
+    + 需要执行/assests/Pre-train_files/BigAdv中的
+```shell
+./download_models.sh
+```
+下载预训练部分
+
